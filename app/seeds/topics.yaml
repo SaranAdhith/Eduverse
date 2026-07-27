@@ -1,0 +1,479 @@
+# DOC_02 §2 — topic catalog. Mirrors DOC_00 §1 (src/eduverse/data/curriculum.yaml).
+#
+# 47 topics across tiers 0..8. `tier` is the integer tier; `display_order` is the
+# stable within-tier ordering (matches the topic id suffix). Topics with
+# is_core=false are the scope cuts (T6.6 stretch + all of T7/T8), per DOC_00 §§0,7.
+#
+# NOTE: DOC_00 prose says "48 topics" but its tier tables enumerate 47; per
+# DOC_02's "topic table is the source of truth" rule, 47 is canonical.
+
+- id: T0.1
+  tier: 0
+  name: "Syntax & program structure"
+  slug: syntax-and-program-structure
+  description: >
+    How a Python program is written and run: statements, indentation as block
+    structure, comments, and the read-eval flow of the interpreter.
+  display_order: 1
+  is_core: true
+
+- id: T0.2
+  tier: 0
+  name: "Variables & data types"
+  slug: variables-and-data-types
+  description: >
+    Binding names to values and the built-in scalar types (int, float, str,
+    bool, None), including dynamic typing and object identity basics.
+  display_order: 2
+  is_core: true
+
+- id: T0.3
+  tier: 0
+  name: "Operators & expressions"
+  slug: operators-and-expressions
+  description: >
+    Arithmetic, comparison, logical, and bitwise operators, operator precedence,
+    and how expressions evaluate to values.
+  display_order: 3
+  is_core: true
+
+- id: T0.4
+  tier: 0
+  name: "Input/output & string formatting"
+  slug: input-output-and-string-formatting
+  description: >
+    Reading input and printing output, plus string formatting with f-strings,
+    str.format, and format specifiers.
+  display_order: 4
+  is_core: true
+
+- id: T0.5
+  tier: 0
+  name: "Type conversion"
+  slug: type-conversion
+  description: >
+    Explicit and implicit conversion between types (int, float, str, bool) and
+    the pitfalls of coercion.
+  display_order: 5
+  is_core: true
+
+- id: T1.1
+  tier: 1
+  name: "Conditionals (if/elif/else)"
+  slug: conditionals
+  description: >
+    Branching with if/elif/else, truthiness, comparison chaining, and the
+    conditional (ternary) expression.
+  display_order: 1
+  is_core: true
+
+- id: T1.2
+  tier: 1
+  name: "for & while loops"
+  slug: for-and-while-loops
+  description: >
+    Iterating with for over iterables and looping with while on a condition,
+    including range and common loop patterns.
+  display_order: 2
+  is_core: true
+
+- id: T1.3
+  tier: 1
+  name: "Loop control (break/continue/else)"
+  slug: loop-control
+  description: >
+    Altering loop flow with break and continue, and the often-misunderstood
+    for/while else clause.
+  display_order: 3
+  is_core: true
+
+- id: T1.4
+  tier: 1
+  name: "Nested control structures"
+  slug: nested-control-structures
+  description: >
+    Composing conditionals and loops inside one another, and reasoning about
+    nested iteration and early exits.
+  display_order: 4
+  is_core: true
+
+- id: T2.1
+  tier: 2
+  name: "Strings: indexing & methods"
+  slug: strings-indexing-and-methods
+  description: >
+    Treating strings as immutable sequences: indexing, slicing, and the common
+    string methods for search, split, and transform.
+  display_order: 1
+  is_core: true
+
+- id: T2.2
+  tier: 2
+  name: "Lists"
+  slug: lists
+  description: >
+    The mutable ordered sequence: construction, indexing/slicing, mutation
+    methods, and aliasing versus copying.
+  display_order: 2
+  is_core: true
+
+- id: T2.3
+  tier: 2
+  name: "Tuples & immutability"
+  slug: tuples-and-immutability
+  description: >
+    Immutable ordered sequences, packing/unpacking, and when immutability
+    matters (hashability, safe sharing).
+  display_order: 3
+  is_core: true
+
+- id: T2.4
+  tier: 2
+  name: "Dictionaries"
+  slug: dictionaries
+  description: >
+    Key/value mappings: construction, lookup, mutation, iteration over
+    keys/values/items, and default handling.
+  display_order: 4
+  is_core: true
+
+- id: T2.5
+  tier: 2
+  name: "Sets"
+  slug: sets
+  description: >
+    Unordered collections of unique elements and the set-algebra operations
+    (union, intersection, difference).
+  display_order: 5
+  is_core: true
+
+- id: T2.6
+  tier: 2
+  name: "Comprehensions (list/dict/set)"
+  slug: comprehensions
+  description: >
+    Building lists, dicts, and sets declaratively, including filter clauses and
+    nested comprehensions, plus the set/dict comprehension distinction.
+  display_order: 6
+  is_core: true
+
+- id: T3.1
+  tier: 3
+  name: "Function definitions & parameters"
+  slug: function-definitions-and-parameters
+  description: >
+    Defining functions with def, positional/keyword parameters, return values,
+    and the basics of the call model.
+  display_order: 1
+  is_core: true
+
+- id: T3.2
+  tier: 3
+  name: "Default/keyword/*args/**kwargs"
+  slug: args-and-kwargs
+  description: >
+    Flexible signatures: default arguments (and the mutable-default trap),
+    keyword-only params, and variadic *args/**kwargs.
+  display_order: 2
+  is_core: true
+
+- id: T3.3
+  tier: 3
+  name: "Scope (local/global/nonlocal)"
+  slug: scope
+  description: >
+    Name resolution under the LEGB rule and the global/nonlocal keywords for
+    rebinding names in enclosing scopes.
+  display_order: 3
+  is_core: true
+
+- id: T3.4
+  tier: 3
+  name: "Lambda functions"
+  slug: lambda-functions
+  description: >
+    Anonymous single-expression functions, where they read well, and their
+    limits versus named functions.
+  display_order: 4
+  is_core: true
+
+- id: T3.5
+  tier: 3
+  name: "Recursion"
+  slug: recursion
+  description: >
+    Functions that call themselves, base/recursive cases, the call stack, and
+    recursion-depth limits.
+  display_order: 5
+  is_core: true
+
+- id: T3.6
+  tier: 3
+  name: "Higher-order functions (map/filter/reduce)"
+  slug: higher-order-functions
+  description: >
+    Passing and returning functions, and the map/filter/reduce family for
+    transforming iterables functionally.
+  display_order: 6
+  is_core: true
+
+- id: T4.1
+  tier: 4
+  name: "Modules & imports"
+  slug: modules-and-imports
+  description: >
+    Organizing code into modules and packages, the import system, and the
+    __name__ == '__main__' idiom.
+  display_order: 1
+  is_core: true
+
+- id: T4.2
+  tier: 4
+  name: "Standard library tour"
+  slug: standard-library-tour
+  description: >
+    A working familiarity with batteries-included modules (math, random,
+    collections, itertools, datetime, json) and how to find them.
+  display_order: 2
+  is_core: true
+
+- id: T4.3
+  tier: 4
+  name: "Exceptions (try/except/finally)"
+  slug: exceptions
+  description: >
+    Handling runtime errors with try/except/else/finally, exception hierarchy,
+    and raising exceptions.
+  display_order: 3
+  is_core: true
+
+- id: T4.4
+  tier: 4
+  name: "Custom exceptions"
+  slug: custom-exceptions
+  description: >
+    Defining domain-specific exception classes by subclassing Exception and
+    designing meaningful error hierarchies.
+  display_order: 4
+  is_core: true
+
+- id: T4.5
+  tier: 4
+  name: "File I/O & context managers (with)"
+  slug: file-io-and-context-managers
+  description: >
+    Reading and writing files and using the with statement to manage resources
+    deterministically.
+  display_order: 5
+  is_core: true
+
+- id: T5.1
+  tier: 5
+  name: "Classes, objects, __init__"
+  slug: classes-and-objects
+  description: >
+    Defining classes, instantiating objects, the __init__ constructor, and the
+    role of self.
+  display_order: 1
+  is_core: true
+
+- id: T5.2
+  tier: 5
+  name: "Instance vs. class attrs, classmethod/staticmethod"
+  slug: instance-and-class-attributes
+  description: >
+    The difference between instance and class attributes and the
+    classmethod/staticmethod decorators.
+  display_order: 2
+  is_core: true
+
+- id: T5.3
+  tier: 5
+  name: "Inheritance & overriding"
+  slug: inheritance-and-overriding
+  description: >
+    Deriving classes, overriding methods, super() delegation, and the method
+    resolution order.
+  display_order: 3
+  is_core: true
+
+- id: T5.4
+  tier: 5
+  name: "Polymorphism & duck typing"
+  slug: polymorphism-and-duck-typing
+  description: >
+    Programming to behavior rather than type, and how duck typing enables
+    substitutability in Python.
+  display_order: 4
+  is_core: true
+
+- id: T5.5
+  tier: 5
+  name: "Encapsulation & @property"
+  slug: encapsulation-and-property
+  description: >
+    Managing access to state with conventions and the @property decorator for
+    computed/validated attributes.
+  display_order: 5
+  is_core: true
+
+- id: T5.6
+  tier: 5
+  name: "Magic/dunder methods"
+  slug: dunder-methods
+  description: >
+    Customizing object behavior via special methods (__repr__, __eq__, __len__,
+    __add__, and friends).
+  display_order: 6
+  is_core: true
+
+- id: T5.7
+  tier: 5
+  name: "Abstract base classes"
+  slug: abstract-base-classes
+  description: >
+    Defining interfaces with abc.ABC and @abstractmethod to enforce a contract
+    on subclasses.
+  display_order: 7
+  is_core: true
+
+- id: T6.1
+  tier: 6
+  name: "Iterators & the iterator protocol"
+  slug: iterators
+  description: >
+    The __iter__/__next__ protocol, StopIteration, and how for loops consume
+    iterables under the hood.
+  display_order: 1
+  is_core: true
+
+- id: T6.2
+  tier: 6
+  name: "Generators & yield"
+  slug: generators-and-yield
+  description: >
+    Lazy iteration with generator functions and expressions, yield, and the
+    memory advantages of streaming.
+  display_order: 2
+  is_core: true
+
+- id: T6.3
+  tier: 6
+  name: "Decorators"
+  slug: decorators
+  description: >
+    Functions that wrap other functions to extend or modify behavior. Covers
+    @-syntax, functools.wraps, parameterised decorators, and class-based
+    decorators.
+  display_order: 3
+  is_core: true
+
+- id: T6.4
+  tier: 6
+  name: "Closures"
+  slug: closures
+  description: >
+    Nested functions capturing enclosing variables, cell references, and the
+    late-binding closure gotcha.
+  display_order: 4
+  is_core: true
+
+- id: T6.5
+  tier: 6
+  name: "Custom context managers (contextlib)"
+  slug: custom-context-managers
+  description: >
+    Writing context managers via __enter__/__exit__ and the
+    contextlib.contextmanager decorator.
+  display_order: 5
+  is_core: true
+
+- id: T6.6
+  tier: 6
+  name: "Metaclasses"
+  slug: metaclasses
+  description: >
+    How classes are themselves objects, type as the default metaclass, and
+    customizing class creation. Stretch topic — first scope cut.
+  display_order: 6
+  is_core: false
+
+- id: T7.1
+  tier: 7
+  name: "Threading & the GIL"
+  slug: threading-and-the-gil
+  description: >
+    The threading module, the Global Interpreter Lock, and when threads help
+    (I/O-bound) versus not (CPU-bound).
+  display_order: 1
+  is_core: false
+
+- id: T7.2
+  tier: 7
+  name: "Multiprocessing basics"
+  slug: multiprocessing-basics
+  description: >
+    Sidestepping the GIL with processes: multiprocessing, pools, and inter-process
+    communication trade-offs.
+  display_order: 2
+  is_core: false
+
+- id: T7.3
+  tier: 7
+  name: "async/await & asyncio fundamentals"
+  slug: async-await-and-asyncio
+  description: >
+    Cooperative concurrency with coroutines, the event loop, and the
+    async/await syntax.
+  display_order: 3
+  is_core: false
+
+- id: T7.4
+  tier: 7
+  name: "Async I/O patterns (gather/tasks)"
+  slug: async-io-patterns
+  description: >
+    Structuring concurrent work with tasks, asyncio.gather, and common
+    async orchestration patterns.
+  display_order: 4
+  is_core: false
+
+- id: T8.1
+  tier: 8
+  name: "Virtual environments & pip"
+  slug: virtual-environments-and-pip
+  description: >
+    Isolating dependencies with virtual environments and installing packages
+    with pip.
+  display_order: 1
+  is_core: false
+
+- id: T8.2
+  tier: 8
+  name: "Packaging (pyproject.toml)"
+  slug: packaging
+  description: >
+    Structuring and publishing a distributable package via pyproject.toml and a
+    build backend.
+  display_order: 2
+  is_core: false
+
+- id: T8.3
+  tier: 8
+  name: "Testing (unittest/pytest)"
+  slug: testing
+  description: >
+    Writing automated tests with unittest and pytest, assertions, fixtures, and
+    test organization.
+  display_order: 3
+  is_core: false
+
+- id: T8.4
+  tier: 8
+  name: "Type hints & static typing"
+  slug: type-hints-and-static-typing
+  description: >
+    Annotating code with type hints and checking it statically with tools like
+    mypy.
+  display_order: 4
+  is_core: false

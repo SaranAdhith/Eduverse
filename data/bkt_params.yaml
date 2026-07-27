@@ -1,0 +1,12 @@
+# Eduverse Bayesian Knowledge Tracing parameters
+# Source: DOC_00 section 4. These are sane cold-start defaults, NOT measured
+# values. Recalibrate via EM fitting once pilot response data exists.
+
+p_l0: 0.3       # prior probability a topic is already mastered before any evidence
+p_transit: 0.15 # P(unmastered -> mastered) after one practice opportunity
+p_guess: 0.25   # P(correct | not mastered); baseline for a 4-option MCQ
+p_slip: 0.1     # P(incorrect | mastered)
+
+# Mastery threshold used by the path planner to decide a prerequisite is "cleared".
+# Not fixed in DOC_00; 0.8 is a conventional BKT routing threshold. Tune in pilot.
+mastery_threshold: 0.8

@@ -1,0 +1,84 @@
+# Eduverse curriculum knowledge graph
+# Source: DOC_00 section 1. Each topic lists its DIRECT prerequisites by ID.
+# This is the DAG the path planner walks; a student is not routed to a topic
+# until every prerequisite shows mastery above threshold.
+
+tiers:
+  T0: {name: "Foundations"}
+  T1: {name: "Control flow"}
+  T2: {name: "Core data structures"}
+  T3: {name: "Functions"}
+  T4: {name: "Modules & error handling"}
+  T5: {name: "Object-oriented programming"}
+  T6: {name: "Advanced language features"}
+  T7: {name: "Concurrency & async"}
+  T8: {name: "Tooling"}
+
+# Topics flagged `core: false` are the easiest scope cuts (DOC_00 sections 0 & 7):
+# the T6.6 stretch topic and the entire T7/T8 tiers. Everything else is core.
+
+topics:
+  # --- T0 Foundations ---
+  - {id: T0.1, tier: T0, name: "Syntax & program structure",            prerequisites: [],            core: true}
+  - {id: T0.2, tier: T0, name: "Variables & data types",                prerequisites: [T0.1],        core: true}
+  - {id: T0.3, tier: T0, name: "Operators & expressions",               prerequisites: [T0.2],        core: true}
+  - {id: T0.4, tier: T0, name: "Input/output & string formatting",      prerequisites: [T0.2],        core: true}
+  - {id: T0.5, tier: T0, name: "Type conversion",                       prerequisites: [T0.2],        core: true}
+
+  # --- T1 Control flow ---
+  - {id: T1.1, tier: T1, name: "Conditionals (if/elif/else)",           prerequisites: [T0.3],        core: true}
+  - {id: T1.2, tier: T1, name: "for & while loops",                     prerequisites: [T0.3],        core: true}
+  - {id: T1.3, tier: T1, name: "Loop control (break/continue/else)",    prerequisites: [T1.2],        core: true}
+  - {id: T1.4, tier: T1, name: "Nested control structures",             prerequisites: [T1.1, T1.2],  core: true}
+
+  # --- T2 Core data structures ---
+  - {id: T2.1, tier: T2, name: "Strings: indexing & methods",           prerequisites: [T0.2],                    core: true}
+  - {id: T2.2, tier: T2, name: "Lists",                                 prerequisites: [T1.2],                    core: true}
+  - {id: T2.3, tier: T2, name: "Tuples & immutability",                 prerequisites: [T2.2],                    core: true}
+  - {id: T2.4, tier: T2, name: "Dictionaries",                          prerequisites: [T2.2],                    core: true}
+  - {id: T2.5, tier: T2, name: "Sets",                                  prerequisites: [T2.2],                    core: true}
+  - {id: T2.6, tier: T2, name: "Comprehensions (list/dict/set)",        prerequisites: [T2.2, T2.4, T2.5, T1.1],  core: true}
+
+  # --- T3 Functions ---
+  - {id: T3.1, tier: T3, name: "Function definitions & parameters",     prerequisites: [T1.1, T1.2],  core: true}
+  - {id: T3.2, tier: T3, name: "Default/keyword/*args/**kwargs",        prerequisites: [T3.1],        core: true}
+  - {id: T3.3, tier: T3, name: "Scope (local/global/nonlocal)",         prerequisites: [T3.1],        core: true}
+  - {id: T3.4, tier: T3, name: "Lambda functions",                      prerequisites: [T3.1],        core: true}
+  - {id: T3.5, tier: T3, name: "Recursion",                             prerequisites: [T3.1, T1.1],  core: true}
+  - {id: T3.6, tier: T3, name: "Higher-order functions (map/filter/reduce)", prerequisites: [T3.1, T3.4], core: true}
+
+  # --- T4 Modules & error handling ---
+  - {id: T4.1, tier: T4, name: "Modules & imports",                     prerequisites: [T3.1],        core: true}
+  - {id: T4.2, tier: T4, name: "Standard library tour",                 prerequisites: [T4.1],        core: true}
+  - {id: T4.3, tier: T4, name: "Exceptions (try/except/finally)",       prerequisites: [T3.1],        core: true}
+  - {id: T4.4, tier: T4, name: "Custom exceptions",                     prerequisites: [T4.3],        core: true}
+  - {id: T4.5, tier: T4, name: "File I/O & context managers (with)",    prerequisites: [T3.1, T4.3],  core: true}
+
+  # --- T5 Object-oriented programming ---
+  - {id: T5.1, tier: T5, name: "Classes, objects, __init__",            prerequisites: [T3.1, T2.4],  core: true}
+  - {id: T5.2, tier: T5, name: "Instance vs. class attrs, classmethod/staticmethod", prerequisites: [T5.1], core: true}
+  - {id: T5.3, tier: T5, name: "Inheritance & overriding",              prerequisites: [T5.1],        core: true}
+  - {id: T5.4, tier: T5, name: "Polymorphism & duck typing",            prerequisites: [T5.3],        core: true}
+  - {id: T5.5, tier: T5, name: "Encapsulation & @property",             prerequisites: [T5.1],        core: true}
+  - {id: T5.6, tier: T5, name: "Magic/dunder methods",                  prerequisites: [T5.1],        core: true}
+  - {id: T5.7, tier: T5, name: "Abstract base classes",                 prerequisites: [T5.3],        core: true}
+
+  # --- T6 Advanced language features ---
+  - {id: T6.1, tier: T6, name: "Iterators & the iterator protocol",     prerequisites: [T2.2, T5.6],          core: true}
+  - {id: T6.2, tier: T6, name: "Generators & yield",                    prerequisites: [T6.1, T3.5],          core: true}
+  - {id: T6.3, tier: T6, name: "Decorators",                            prerequisites: [T3.1, T3.4, T3.6],    core: true}
+  - {id: T6.4, tier: T6, name: "Closures",                              prerequisites: [T3.1, T3.3, T3.4],    core: true}
+  - {id: T6.5, tier: T6, name: "Custom context managers (contextlib)",  prerequisites: [T4.5, T6.3],          core: true}
+  - {id: T6.6, tier: T6, name: "Metaclasses",                           prerequisites: [T5.1, T5.3, T5.7],    core: false}  # stretch, cut first
+
+  # --- T7 Concurrency & async (cuttable for time) ---
+  - {id: T7.1, tier: T7, name: "Threading & the GIL",                   prerequisites: [T3.1, T4.3],  core: false}
+  - {id: T7.2, tier: T7, name: "Multiprocessing basics",                prerequisites: [T7.1],        core: false}
+  - {id: T7.3, tier: T7, name: "async/await & asyncio fundamentals",    prerequisites: [T6.2, T3.1],  core: false}
+  - {id: T7.4, tier: T7, name: "Async I/O patterns (gather/tasks)",     prerequisites: [T7.3],        core: false}
+
+  # --- T8 Tooling (cuttable for time) ---
+  - {id: T8.1, tier: T8, name: "Virtual environments & pip",            prerequisites: [T4.1],        core: false}
+  - {id: T8.2, tier: T8, name: "Packaging (pyproject.toml)",            prerequisites: [T4.2, T8.1],  core: false}
+  - {id: T8.3, tier: T8, name: "Testing (unittest/pytest)",             prerequisites: [T3.1, T4.3],  core: false}
+  - {id: T8.4, tier: T8, name: "Type hints & static typing",            prerequisites: [T3.1, T5.1],  core: false}

@@ -1,0 +1,159 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Eduverse design system — an "adaptive learning universe": an indigo→violet
+   brand with a teal mastery accent, on a soft cool canvas (light) or deep space
+   navy (dark). Semantic HSL tokens so the whole app re-themes from here. */
+@layer base {
+  :root {
+    --background: 250 45% 99%;
+    --foreground: 244 25% 13%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 244 25% 13%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 244 25% 13%;
+
+    --primary: 250 78% 60%; /* indigo */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 250 30% 95%;
+    --secondary-foreground: 250 40% 32%;
+
+    --muted: 250 24% 95%;
+    --muted-foreground: 244 10% 44%;
+
+    --accent: 250 70% 96%;
+    --accent-foreground: 250 55% 40%;
+
+    --destructive: 2 72% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 168 64% 34%; /* teal — mastery */
+    --success-foreground: 0 0% 100%;
+
+    --warning: 36 92% 46%; /* amber */
+    --warning-foreground: 40 45% 12%;
+
+    --border: 250 22% 90%;
+    --input: 250 22% 89%;
+    --ring: 250 78% 60%;
+
+    /* Brand gradient stops (indigo → violet → cyan). */
+    --brand: 250 78% 60%;
+    --brand-2: 275 72% 62%;
+    --brand-3: 200 90% 52%;
+
+    --radius: 0.85rem;
+  }
+
+  .dark {
+    --background: 245 32% 8%;
+    --foreground: 250 30% 92%;
+
+    --card: 246 28% 12%;
+    --card-foreground: 250 30% 92%;
+
+    --popover: 246 28% 13%;
+    --popover-foreground: 250 30% 92%;
+
+    --primary: 252 90% 72%;
+    --primary-foreground: 245 45% 9%;
+
+    --secondary: 245 20% 20%;
+    --secondary-foreground: 250 30% 92%;
+
+    --muted: 245 20% 18%;
+    --muted-foreground: 250 14% 66%;
+
+    --accent: 250 40% 24%;
+    --accent-foreground: 252 85% 88%;
+
+    --destructive: 2 70% 62%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 168 58% 50%;
+    --success-foreground: 245 45% 9%;
+
+    --warning: 38 92% 58%;
+    --warning-foreground: 40 45% 10%;
+
+    --border: 245 18% 22%;
+    --input: 245 18% 24%;
+    --ring: 252 90% 72%;
+
+    --brand: 252 90% 72%;
+    --brand-2: 278 85% 74%;
+    --brand-3: 198 90% 62%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv11", "ss01";
+  }
+  h1, h2, h3, .font-display {
+    font-family: var(--font-display), var(--font-inter), system-ui, sans-serif;
+  }
+  /* Generous line-height on lesson prose. */
+  .prose-lesson {
+    line-height: 1.75;
+  }
+}
+
+@layer components {
+  /* Aurora canvas: soft brand light-sources bleeding in from the edges. Reads on
+     both themes because it's built from brand tokens over the background. */
+  .bg-aurora {
+    background-color: hsl(var(--background));
+    background-image:
+      radial-gradient(42rem 42rem at 12% -12%, hsl(var(--brand) / 0.18), transparent 60%),
+      radial-gradient(38rem 38rem at 105% 0%, hsl(var(--brand-2) / 0.16), transparent 55%),
+      radial-gradient(34rem 34rem at 50% 118%, hsl(var(--brand-3) / 0.12), transparent 60%);
+  }
+  .dark .bg-aurora {
+    background-image:
+      radial-gradient(42rem 42rem at 12% -12%, hsl(var(--brand) / 0.22), transparent 60%),
+      radial-gradient(38rem 38rem at 105% 0%, hsl(var(--brand-2) / 0.20), transparent 55%),
+      radial-gradient(34rem 34rem at 50% 118%, hsl(var(--brand-3) / 0.14), transparent 60%);
+  }
+
+  /* Indigo→violet text for headlines and the wordmark. */
+  .text-gradient {
+    background-image: linear-gradient(
+      100deg,
+      hsl(var(--brand)),
+      hsl(var(--brand-2)) 55%,
+      hsl(var(--brand-3))
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Subtle raise on hover for interactive cards. */
+  .hover-lift {
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  }
+  .hover-lift:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* Honour reduced-motion for every animation (accessibility). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

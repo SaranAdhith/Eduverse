@@ -1,0 +1,59 @@
+# DOC_02 §2 — prerequisite edge list. Mirrors DOC_00 §1
+# (src/eduverse/data/curriculum.yaml). Each entry lists a topic's DIRECT
+# prerequisites. T0.1 has none and is therefore omitted (it is the sole root,
+# per DOC_00). The loader validates every referenced id exists in topics.yaml.
+
+- {topic: T0.2, requires: [T0.1]}
+- {topic: T0.3, requires: [T0.2]}
+- {topic: T0.4, requires: [T0.2]}
+- {topic: T0.5, requires: [T0.2]}
+
+- {topic: T1.1, requires: [T0.3]}
+- {topic: T1.2, requires: [T0.3]}
+- {topic: T1.3, requires: [T1.2]}
+- {topic: T1.4, requires: [T1.1, T1.2]}
+
+- {topic: T2.1, requires: [T0.2]}
+- {topic: T2.2, requires: [T1.2]}
+- {topic: T2.3, requires: [T2.2]}
+- {topic: T2.4, requires: [T2.2]}
+- {topic: T2.5, requires: [T2.2]}
+- {topic: T2.6, requires: [T2.2, T2.4, T2.5, T1.1]}
+
+- {topic: T3.1, requires: [T1.1, T1.2]}
+- {topic: T3.2, requires: [T3.1]}
+- {topic: T3.3, requires: [T3.1]}
+- {topic: T3.4, requires: [T3.1]}
+- {topic: T3.5, requires: [T3.1, T1.1]}
+- {topic: T3.6, requires: [T3.1, T3.4]}
+
+- {topic: T4.1, requires: [T3.1]}
+- {topic: T4.2, requires: [T4.1]}
+- {topic: T4.3, requires: [T3.1]}
+- {topic: T4.4, requires: [T4.3]}
+- {topic: T4.5, requires: [T3.1, T4.3]}
+
+- {topic: T5.1, requires: [T3.1, T2.4]}
+- {topic: T5.2, requires: [T5.1]}
+- {topic: T5.3, requires: [T5.1]}
+- {topic: T5.4, requires: [T5.3]}
+- {topic: T5.5, requires: [T5.1]}
+- {topic: T5.6, requires: [T5.1]}
+- {topic: T5.7, requires: [T5.3]}
+
+- {topic: T6.1, requires: [T2.2, T5.6]}
+- {topic: T6.2, requires: [T6.1, T3.5]}
+- {topic: T6.3, requires: [T3.1, T3.4, T3.6]}
+- {topic: T6.4, requires: [T3.1, T3.3, T3.4]}
+- {topic: T6.5, requires: [T4.5, T6.3]}
+- {topic: T6.6, requires: [T5.1, T5.3, T5.7]}
+
+- {topic: T7.1, requires: [T3.1, T4.3]}
+- {topic: T7.2, requires: [T7.1]}
+- {topic: T7.3, requires: [T6.2, T3.1]}
+- {topic: T7.4, requires: [T7.3]}
+
+- {topic: T8.1, requires: [T4.1]}
+- {topic: T8.2, requires: [T4.2, T8.1]}
+- {topic: T8.3, requires: [T3.1, T4.3]}
+- {topic: T8.4, requires: [T3.1, T5.1]}

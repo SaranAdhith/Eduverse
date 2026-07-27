@@ -1,0 +1,22 @@
+# DOC_01 §4: local Postgres 16 + pgvector. No app container — devs run the
+# FastAPI app on the host (see Makefile `dev`).
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: eduverse-db
+    environment:
+      POSTGRES_USER: eduverse
+      POSTGRES_PASSWORD: eduverse
+      POSTGRES_DB: eduverse
+    ports:
+      - "5432:5432"
+    volumes:
+      - eduverse_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U eduverse -d eduverse"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  eduverse_pgdata:

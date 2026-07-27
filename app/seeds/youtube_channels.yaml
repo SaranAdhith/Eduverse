@@ -1,0 +1,44 @@
+# DOC_03 §3 — vetted YouTube channel allow-list. Scout only ever searches within
+# these channelIds (no open search). `reputation` is a manual 0..1 quality score
+# consumed by the ranker (DOC_03 §4.4). Verify every channel_id before merging —
+# `make seed-channels` fails loudly if one does not resolve.
+
+- channel_id: UC8butISFwT-Wl7EV0hUK0BQ   # freeCodeCamp.org
+  title: freeCodeCamp.org
+  reputation: 0.9
+  notes: Long-form Python tutorials and full courses.
+
+- channel_id: UCCezIgC97PvUuR4_gbFUs5g   # Corey Schafer
+  title: Corey Schafer
+  reputation: 0.95
+  notes: Topic-by-topic Python deep dives; excellent for OOP and decorators.
+
+- channel_id: UCsvqVGtbbyHaMoevxPAq9Fg   # mCoding (James Murphy)
+  title: mCoding
+  reputation: 0.9
+  notes: Advanced language features, idiomatic Python.
+
+- channel_id: UCI0vQvr9aFn27yR6Ej6n5UA   # ArjanCodes
+  title: ArjanCodes
+  reputation: 0.85
+  notes: Design patterns, OOP, modern Python.
+
+- channel_id: UCG7J20LhUeLl6y_Emi7OJrA   # Real Python
+  title: Real Python
+  reputation: 0.85
+  notes: Reliable tutorials.
+
+- channel_id: UC-QDfvrRIDB6F0bIO4I4HkQ   # Tech With Tim
+  title: Tech With Tim
+  reputation: 0.75
+  notes: Beginner-to-intermediate Python, projects and fundamentals.
+
+- channel_id: UCWv7vMbMWH4-V0ZXdmDpPBA   # Programming with Mosh
+  title: Programming with Mosh
+  reputation: 0.75
+  notes: Clean beginner Python fundamentals.
+
+- channel_id: UC68KSmHePPePCjW4v57VPQg   # NeetCode
+  title: NeetCode
+  reputation: 0.8
+  notes: Algorithms/data structures in Python; good for recursion and complexity.

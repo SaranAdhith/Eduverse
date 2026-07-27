@@ -1,0 +1,94 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master, pilot-ready]
+  pull_request:
+
+jobs:
+  backend:
+    name: backend (unit + e2e + pilot-check)
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: eduverse
+          POSTGRES_PASSWORD: eduverse
+          POSTGRES_DB: eduverse
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U eduverse"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql+asyncpg://eduverse:eduverse@localhost:5432/eduverse
+      ENV: test
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: uv sync --extra dev
+
+      - name: Lint (ruff + mypy)
+        run: |
+          uv run ruff check .
+          uv run mypy
+
+      - name: Apply migrations + seed the catalog
+        run: |
+          uv run alembic upgrade head
+          uv run python -m app.seeds.loader seed
+
+      - name: Unit + integration tests
+        run: uv run pytest tests --ignore=tests/e2e -q
+
+      - name: End-to-end seam tests (DOC_09 §2)
+        run: uv run pytest tests/e2e -q
+
+      - name: Pilot-readiness check (DOC_09 §3)
+        run: uv run python -m scripts.validate
+
+  frontend:
+    name: frontend (typecheck + lint + build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm lint
+      - run: pnpm build
+
+  pilot-readiness-gate:
+    name: pilot-readiness checklist
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/pilot-ready'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fail on any unchecked, unowned checklist item
+        run: |
+          # An item is acceptable if checked ([x]) or carries a named "(owner:...)".
+          if grep -nE '^- \[ \]' PILOT_READINESS.md | grep -vq '(owner'; then
+            echo "Unchecked, unowned items remain in PILOT_READINESS.md:"
+            grep -nE '^- \[ \]' PILOT_READINESS.md | grep -v '(owner' || true
+            exit 1
+          fi
+          echo "PILOT_READINESS.md: all items checked or owned."

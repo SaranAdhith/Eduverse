@@ -1,0 +1,53 @@
+# Eduverse diagnostic test blueprint
+# Source: DOC_00 section 2. 25 items total. The diagnostic does NOT test every
+# leaf node; it probes one or two ANCHOR topics per tier as a coarse placement
+# signal. Fine-grained per-topic mastery is built up later by the gate quizzes.
+
+items_total: 25
+
+# Difficulty keys must match the per-entry `difficulty` maps below.
+difficulties: [easy, medium, hard]
+
+tiers:
+  - tier: T0
+    anchors: [T0.2, T0.3]                 # Variables & types, Operators
+    items: 3
+    difficulty: {easy: 2, medium: 1}
+
+  - tier: T1
+    anchors: [T1.1, T1.2]                 # Conditionals, Loops
+    items: 3
+    difficulty: {easy: 1, medium: 2}
+
+  - tier: T2
+    anchors: [T2.2, T2.4, T2.6]           # Lists, Dictionaries, Comprehensions
+    items: 4
+    difficulty: {easy: 1, medium: 2, hard: 1}
+
+  - tier: T3
+    anchors: [T3.1, T3.5, T3.6]           # Parameters, Recursion, Higher-order
+    items: 4
+    difficulty: {medium: 2, hard: 2}
+
+  - tier: T4
+    anchors: [T4.3, T4.5]                 # Exceptions, Context managers
+    items: 3
+    difficulty: {medium: 2, hard: 1}
+
+  - tier: T5
+    anchors: [T5.3, T5.5, T5.6]           # Inheritance, Properties, Magic methods
+    items: 4
+    difficulty: {medium: 1, hard: 3}
+
+  - tier: T6
+    anchors: [T6.2, T6.3, T6.4]           # Generators, Decorators, Closures
+    items: 3
+    difficulty: {hard: 3}
+
+  # T7 async is deliberately not probed directly (one item can't assess async
+  # readiness; clearing every prerequisite gate is the better signal). The single
+  # T7/T8 item targets type hints (T8.4).
+  - tier: T8
+    anchors: [T8.4]                       # Type hints
+    items: 1
+    difficulty: {hard: 1}

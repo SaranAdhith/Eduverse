@@ -1,0 +1,94 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eduverse"
+version = "0.1.0"
+description = "Adaptive Python-learning agent (research prototype) — see DOC_00"
+# DOC_01 §1 pins Python 3.11. DOC_00's data layer ran on >=3.10; the backend
+# scaffold narrows this to 3.11 for the whole project.
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    # DOC_00 data foundation
+    "pyyaml>=6.0",
+    # DOC_01 §1 backend stack
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "sqlalchemy[asyncio]>=2.0",
+    "alembic>=1.13",
+    "asyncpg>=0.29",
+    "anthropic>=0.39",
+    "structlog>=24.1",
+    "pydantic>=2.7",
+    "pydantic-settings>=2.2",
+    # DOC_03 video curation pipeline
+    "google-api-python-client>=2.100",  # YouTube Data API v3 (search + metadata)
+    "youtube-transcript-api>=0.6",       # public caption fetch (no video download)
+    "voyageai>=0.2",                     # voyage-3 embeddings for segment transcripts
+    "pgvector>=0.3",                     # SQLAlchemy VECTOR type + hnsw index support
+]
+
+[project.optional-dependencies]
+# DOC_03 §4.3: offline embedding fallback. Heavy (pulls torch), so kept optional;
+# install with `uv sync --extra local-embed` for offline dev.
+local-embed = ["sentence-transformers>=2.2"]
+dev = [
+    "pytest>=7.0",
+    "pytest-asyncio>=0.23",
+    "httpx>=0.27",
+    "ruff>=0.5",
+    "mypy>=1.10",
+    "types-PyYAML>=6.0",
+]
+
+[project.scripts]
+eduverse-validate = "eduverse.validate:main"
+
+[tool.setuptools.packages.find]
+# eduverse (DOC_00) is the installable package. The DOC_01 `app/` package is a
+# runnable service (uvicorn app.main:app) and is exercised via pythonpath, not
+# pip-installed, so it is intentionally not listed here.
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = [".", "src"]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["app", "src"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "W"]
+
+[tool.ruff.lint.flake8-bugbear]
+# FastAPI's dependency-injection idiom relies on Depends()/Header() calls in
+# argument defaults; these are safe here.
+extend-immutable-calls = ["fastapi.Depends", "fastapi.Header", "fastapi.Query"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+plugins = ["pydantic.mypy"]
+# DOC_01 §8.5 requires `mypy app/` clean; the DOC_00 data layer is out of scope
+# for strict typing in this phase.
+files = ["app"]
+
+[[tool.mypy.overrides]]
+module = [
+    "asyncpg.*",
+    "googleapiclient.*",
+    "pgvector.*",
+    "voyageai.*",
+    "sentence_transformers.*",
+    "youtube_transcript_api.*",
+]
+ignore_missing_imports = true
+
+[dependency-groups]
+dev = [
+    "hypothesis>=6.155.7",
+]

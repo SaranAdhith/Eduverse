@@ -1,0 +1,9 @@
+# DOC_08 §7 — analysis notebook dependencies. Installed into a separate venv
+# from the backend; the export tarball format (analysis/lib/load.py) is the only
+# contract between them.
+pandas>=2.2
+scipy>=1.13
+statsmodels>=0.14
+matplotlib>=3.8
+scikit-learn>=1.5
+jupyter>=1.0

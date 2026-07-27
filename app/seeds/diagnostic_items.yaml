@@ -1,0 +1,472 @@
+# DOC_02 §2 — the 25-item diagnostic placement test. Conforms to the tier/anchor/
+# difficulty blueprint in DOC_00 §2 (src/eduverse/data/diagnostic_blueprint.yaml):
+#
+#   tier  items  anchors                difficulty mix
+#   T0    3      T0.2, T0.3             easy 2, medium 1
+#   T1    3      T1.1, T1.2             easy 1, medium 2
+#   T2    4      T2.2, T2.4, T2.6       easy 1, medium 2, hard 1
+#   T3    4      T3.1, T3.5, T3.6       medium 2, hard 2
+#   T4    3      T4.3, T4.5             medium 2, hard 1
+#   T5    4      T5.3, T5.5, T5.6       medium 1, hard 3
+#   T6    3      T6.2, T6.3, T6.4       hard 3
+#   T8    1      T8.4                   hard 1
+#
+# Totals: 25 items — easy 4, medium 10, hard 11. Easy items test recall; hard
+# items test code tracing. Exactly one choice per item is correct.
+
+# --- Tier 0: Foundations ---
+- order: 1
+  topic: T0.2
+  difficulty: easy
+  stem: "What is the type of the literal `3.0` in Python?"
+  choices:
+    - {label: A, text: "float", correct: true}
+    - {label: B, text: "int", correct: false}
+    - {label: C, text: "str", correct: false}
+    - {label: D, text: "decimal", correct: false}
+  explanation: >
+    A numeric literal written with a decimal point is a float. `3` would be an
+    int; `decimal` is not a built-in literal type.
+
+- order: 2
+  topic: T0.3
+  difficulty: easy
+  stem: "What does the expression `7 // 2` evaluate to?"
+  choices:
+    - {label: A, text: "3", correct: true}
+    - {label: B, text: "3.5", correct: false}
+    - {label: C, text: "1", correct: false}
+    - {label: D, text: "4", correct: false}
+  explanation: >
+    `//` is floor division, which discards the fractional part, giving 3. `/`
+    would give 3.5 and `%` would give the remainder 1.
+
+- order: 3
+  topic: T0.3
+  difficulty: medium
+  stem: "What is the value of `2 ** 3 ** 2`?"
+  choices:
+    - {label: A, text: "512", correct: true}
+    - {label: B, text: "64", correct: false}
+    - {label: C, text: "128", correct: false}
+    - {label: D, text: "256", correct: false}
+  explanation: >
+    Exponentiation is right-associative, so this evaluates as 2 ** (3 ** 2) =
+    2 ** 9 = 512, not (2 ** 3) ** 2 = 64.
+
+# --- Tier 1: Control flow ---
+- order: 4
+  topic: T1.1
+  difficulty: easy
+  stem: >
+    Which keyword introduces an alternative branch that is tested only when the
+    previous conditions were all false?
+  choices:
+    - {label: A, text: "elif", correct: true}
+    - {label: B, text: "else if", correct: false}
+    - {label: C, text: "elseif", correct: false}
+    - {label: D, text: "switch", correct: false}
+  explanation: >
+    Python spells "else if" as a single keyword, `elif`. `else if`/`elseif` are
+    from other languages, and Python has no `switch` statement.
+
+- order: 5
+  topic: T1.2
+  difficulty: medium
+  stem: "How many times does the loop body execute?"
+  stem_code: |
+    total = 0
+    for i in range(2, 10, 3):
+        total += 1
+  choices:
+    - {label: A, text: "3", correct: true}
+    - {label: B, text: "2", correct: false}
+    - {label: C, text: "4", correct: false}
+    - {label: D, text: "8", correct: false}
+  explanation: >
+    range(2, 10, 3) yields 2, 5, 8 — it stops before 10 — so the body runs 3
+    times.
+
+- order: 6
+  topic: T1.1
+  difficulty: medium
+  stem: "What does this code print?"
+  stem_code: |
+    x = 5
+    print("A" if x > 3 else "B" if x > 1 else "C")
+  choices:
+    - {label: A, text: "A", correct: true}
+    - {label: B, text: "B", correct: false}
+    - {label: C, text: "C", correct: false}
+    - {label: D, text: "It raises a SyntaxError", correct: false}
+  explanation: >
+    The conditional expression is evaluated left to right: x > 3 is true, so it
+    yields "A" without evaluating the rest.
+
+# --- Tier 2: Core data structures ---
+- order: 7
+  topic: T2.2
+  difficulty: easy
+  stem: "Given `nums = [10, 20, 30, 40]`, what is `nums[-2]`?"
+  choices:
+    - {label: A, text: "30", correct: true}
+    - {label: B, text: "20", correct: false}
+    - {label: C, text: "40", correct: false}
+    - {label: D, text: "It raises an IndexError", correct: false}
+  explanation: >
+    Negative indices count from the end: -1 is 40 and -2 is 30.
+
+- order: 8
+  topic: T2.4
+  difficulty: medium
+  stem: "What does this code print?"
+  stem_code: |
+    d = {'a': 1, 'b': 2}
+    print(d.get('c', 0) + d['a'])
+  choices:
+    - {label: A, text: "1", correct: true}
+    - {label: B, text: "0", correct: false}
+    - {label: C, text: "It raises a KeyError", correct: false}
+    - {label: D, text: "3", correct: false}
+  explanation: >
+    d.get('c', 0) returns the default 0 because 'c' is absent (no KeyError),
+    and d['a'] is 1, so the sum is 1.
+
+- order: 9
+  topic: T2.6
+  difficulty: medium
+  stem: "Which expression produces a list of the squares of the even numbers from 0–9?"
+  choices:
+    - {label: A, text: "[x**2 for x in range(10) if x % 2 == 0]", correct: true}
+    - {label: B, text: "[x for x in range(10) if x**2 % 2 == 0]", correct: false}
+    - {label: C, text: "[x**2 if x % 2 == 0 for x in range(10)]", correct: false}
+    - {label: D, text: "{x**2 for x in range(10) if x % 2 == 0}", correct: false}
+  explanation: >
+    The filter clause comes after the for clause in a comprehension. Option C
+    has the conditional in the wrong position; option D produces a set, not a
+    list.
+
+- order: 10
+  topic: T2.6
+  difficulty: hard
+  stem: "What is the value of the following expression?"
+  stem_code: |
+    [y for x in [[1, 2], [3, 4]] for y in x]
+  choices:
+    - {label: A, text: "[1, 2, 3, 4]", correct: true}
+    - {label: B, text: "[[1, 2], [3, 4]]", correct: false}
+    - {label: C, text: "[1, 3]", correct: false}
+    - {label: D, text: "It raises a TypeError", correct: false}
+  explanation: >
+    In a nested comprehension the clauses read left to right like nested loops:
+    outer over the sublists, inner over each sublist's elements, flattening to
+    [1, 2, 3, 4].
+
+# --- Tier 3: Functions ---
+- order: 11
+  topic: T3.1
+  difficulty: medium
+  stem: "What does this code print?"
+  stem_code: |
+    def f(a, b=2, c=3):
+        return a + b * c
+
+    print(f(1, c=4))
+  choices:
+    - {label: A, text: "9", correct: true}
+    - {label: B, text: "11", correct: false}
+    - {label: C, text: "15", correct: false}
+    - {label: D, text: "It raises a TypeError", correct: false}
+  explanation: >
+    The keyword argument sets c=4 while b keeps its default 2, so the result is
+    1 + 2 * 4 = 9.
+
+- order: 12
+  topic: T3.5
+  difficulty: medium
+  stem: "What does this code print?"
+  stem_code: |
+    def f(n):
+        if n <= 1:
+            return 1
+        return n * f(n - 1)
+
+    print(f(4))
+  choices:
+    - {label: A, text: "24", correct: true}
+    - {label: B, text: "10", correct: false}
+    - {label: C, text: "12", correct: false}
+    - {label: D, text: "4", correct: false}
+  explanation: >
+    This is factorial: 4 * 3 * 2 * 1 = 24.
+
+- order: 13
+  topic: T3.6
+  difficulty: hard
+  stem: "What does this code print?"
+  stem_code: |
+    from functools import reduce
+
+    nums = [1, 2, 3, 4]
+    print(reduce(lambda a, b: a + b, filter(lambda x: x % 2 == 0, nums)))
+  choices:
+    - {label: A, text: "6", correct: true}
+    - {label: B, text: "10", correct: false}
+    - {label: C, text: "8", correct: false}
+    - {label: D, text: "4", correct: false}
+  explanation: >
+    filter keeps the even numbers [2, 4], and reduce sums them: 2 + 4 = 6.
+
+- order: 14
+  topic: T3.5
+  difficulty: hard
+  stem: "What does this code print?"
+  stem_code: |
+    def f(n):
+        if n < 2:
+            return n
+        return f(n - 1) + f(n - 2)
+
+    print(f(5))
+  choices:
+    - {label: A, text: "5", correct: true}
+    - {label: B, text: "8", correct: false}
+    - {label: C, text: "3", correct: false}
+    - {label: D, text: "4", correct: false}
+  explanation: >
+    This is the Fibonacci sequence (0, 1, 1, 2, 3, 5, ...); f(5) = 5.
+
+# --- Tier 4: Modules & error handling ---
+- order: 15
+  topic: T4.3
+  difficulty: medium
+  stem: "What does this code print?"
+  stem_code: |
+    try:
+        x = int("12a")
+    except ValueError:
+        x = -1
+    print(x)
+  choices:
+    - {label: A, text: "-1", correct: true}
+    - {label: B, text: "12", correct: false}
+    - {label: C, text: "0", correct: false}
+    - {label: D, text: "It raises a ValueError", correct: false}
+  explanation: >
+    int("12a") raises ValueError, which is caught, so x is set to -1 and the
+    exception does not propagate.
+
+- order: 16
+  topic: T4.5
+  difficulty: medium
+  stem: "What is the primary guarantee the `with` statement provides when opening a file?"
+  choices:
+    - {label: A, text: "The file is closed when the block exits, even if an exception is raised", correct: true}
+    - {label: B, text: "The entire file contents are cached in memory", correct: false}
+    - {label: C, text: "The file is always opened in binary mode", correct: false}
+    - {label: D, text: "Every write is flushed to disk immediately", correct: false}
+  explanation: >
+    A `with` block invokes the context manager's __exit__ on the way out — even
+    on error — which for a file closes it deterministically.
+
+- order: 17
+  topic: T4.3
+  difficulty: hard
+  stem: "What does this code print, and in what order?"
+  stem_code: |
+    def f():
+        try:
+            return "try"
+        finally:
+            print("finally")
+
+    print(f())
+  choices:
+    - {label: A, text: "finally then try", correct: true}
+    - {label: B, text: "try then finally", correct: false}
+    - {label: C, text: "try only", correct: false}
+    - {label: D, text: "finally only", correct: false}
+  explanation: >
+    The finally block runs before the function actually returns, so "finally"
+    prints first; then the caller prints the returned value "try".
+
+# --- Tier 5: Object-oriented programming ---
+- order: 18
+  topic: T5.3
+  difficulty: medium
+  stem: "What does this code print?"
+  stem_code: |
+    class A:
+        def greet(self):
+            return "A"
+
+    class B(A):
+        def greet(self):
+            return "B" + super().greet()
+
+    print(B().greet())
+  choices:
+    - {label: A, text: "BA", correct: true}
+    - {label: B, text: "AB", correct: false}
+    - {label: C, text: "B", correct: false}
+    - {label: D, text: "A", correct: false}
+  explanation: >
+    B.greet returns "B" concatenated with super().greet(), which calls A.greet
+    ("A"), giving "BA".
+
+- order: 19
+  topic: T5.5
+  difficulty: hard
+  stem: "What does this code print?"
+  stem_code: |
+    class C:
+        def __init__(self, v):
+            self._v = v
+        @property
+        def v(self):
+            return self._v
+        @v.setter
+        def v(self, value):
+            self._v = value * 2
+
+    c = C(3)
+    c.v = 5
+    print(c.v)
+  choices:
+    - {label: A, text: "10", correct: true}
+    - {label: B, text: "5", correct: false}
+    - {label: C, text: "3", correct: false}
+    - {label: D, text: "6", correct: false}
+  explanation: >
+    __init__ assigns self._v directly (bypassing the setter), but `c.v = 5`
+    goes through the setter, which stores 5 * 2 = 10.
+
+- order: 20
+  topic: T5.6
+  difficulty: hard
+  stem: "What does this code print?"
+  stem_code: |
+    class V:
+        def __init__(self, n):
+            self.n = n
+        def __add__(self, other):
+            return V(self.n + other.n)
+        def __repr__(self):
+            return f"V({self.n})"
+
+    print(V(2) + V(3))
+  choices:
+    - {label: A, text: "V(5)", correct: true}
+    - {label: B, text: "5", correct: false}
+    - {label: C, text: "V(2)V(3)", correct: false}
+    - {label: D, text: "It raises a TypeError", correct: false}
+  explanation: >
+    __add__ builds V(2 + 3) = V(5), and __repr__ controls how it prints, giving
+    "V(5)".
+
+- order: 21
+  topic: T5.3
+  difficulty: hard
+  stem: "What does this code print?"
+  stem_code: |
+    class A:
+        def who(self):
+            return "A"
+    class B(A):
+        def who(self):
+            return "B"
+    class C(A):
+        def who(self):
+            return "C"
+    class D(B, C):
+        pass
+
+    print(D().who())
+  choices:
+    - {label: A, text: "B", correct: true}
+    - {label: B, text: "C", correct: false}
+    - {label: C, text: "A", correct: false}
+    - {label: D, text: "It raises a TypeError", correct: false}
+  explanation: >
+    The method resolution order for D(B, C) is D, B, C, A, so the first `who`
+    found is B's, printing "B".
+
+# --- Tier 6: Advanced language features ---
+- order: 22
+  topic: T6.2
+  difficulty: hard
+  stem: "What does this code print?"
+  stem_code: |
+    def gen():
+        yield 1
+        yield 2
+        yield 3
+
+    g = gen()
+    next(g)
+    print(next(g))
+  choices:
+    - {label: A, text: "2", correct: true}
+    - {label: B, text: "1", correct: false}
+    - {label: C, text: "3", correct: false}
+    - {label: D, text: "It raises StopIteration", correct: false}
+  explanation: >
+    The first next(g) consumes and discards 1; the second returns 2, which is
+    printed. A generator resumes where it last yielded.
+
+- order: 23
+  topic: T6.3
+  difficulty: hard
+  stem: "What does this code print?"
+  stem_code: |
+    def twice(fn):
+        def wrapper(x):
+            return fn(fn(x))
+        return wrapper
+
+    @twice
+    def inc(x):
+        return x + 1
+
+    print(inc(5))
+  choices:
+    - {label: A, text: "7", correct: true}
+    - {label: B, text: "6", correct: false}
+    - {label: C, text: "11", correct: false}
+    - {label: D, text: "5", correct: false}
+  explanation: >
+    The decorator replaces inc with wrapper, which applies the original inc
+    twice: inc(inc(5)) = inc(6) = 7.
+
+- order: 24
+  topic: T6.4
+  difficulty: hard
+  stem: "What does this code print?"
+  stem_code: |
+    funcs = [lambda: i for i in range(3)]
+    print([f() for f in funcs])
+  choices:
+    - {label: A, text: "[2, 2, 2]", correct: true}
+    - {label: B, text: "[0, 1, 2]", correct: false}
+    - {label: C, text: "[0, 0, 0]", correct: false}
+    - {label: D, text: "It raises a NameError", correct: false}
+  explanation: >
+    Closures capture the variable i by reference, not its value. By the time the
+    lambdas are called, the loop has finished with i = 2, so every call returns
+    2.
+
+# --- Tier 8: Tooling ---
+- order: 25
+  topic: T8.4
+  difficulty: hard
+  stem: >
+    In `def f(x: int) -> int: ...`, what does CPython do with the `int`
+    annotations at runtime by default?
+  choices:
+    - {label: A, text: "Nothing is enforced — the hints are stored but only static checkers like mypy use them", correct: true}
+    - {label: B, text: "It raises a TypeError if x is not an int", correct: false}
+    - {label: C, text: "It converts x to an int automatically", correct: false}
+    - {label: D, text: "It prevents the function from being called with a non-int", correct: false}
+  explanation: >
+    Type hints are recorded in __annotations__ but not enforced by the
+    interpreter; enforcement is the job of external static type checkers.
