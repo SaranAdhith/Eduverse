@@ -2,91 +2,61 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Eduverse design system — an "adaptive learning universe": an indigo→violet
-   brand with a teal mastery accent, on a soft cool canvas (light) or deep space
-   navy (dark). Semantic HSL tokens so the whole app re-themes from here. */
+/* Eduverse design system — "research paper": a warm paper ground, a deep green
+   accent, Spectral serif headings over IBM Plex Sans, and IBM Plex Mono for
+   every number, code span and micro-label. Flat and square: 1px rules, no
+   radii, no gradients. Semantic HSL tokens so the whole app re-themes here.
+
+   The system is light-only by design — a single printed-paper ground is the
+   point, and there is no dark counterpart in the design. */
 @layer base {
   :root {
-    --background: 250 45% 99%;
-    --foreground: 244 25% 13%;
+    --background: 42 33% 92%; /* #f2eee5 warm paper */
+    --foreground: 45 8% 10%; /* #1b1a17 ink */
 
-    --card: 0 0% 100%;
-    --card-foreground: 244 25% 13%;
+    --card: 40 100% 99%; /* #fffdf9 sheet */
+    --card-foreground: 45 8% 10%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 244 25% 13%;
+    --popover: 40 100% 99%;
+    --popover-foreground: 45 8% 10%;
 
-    --primary: 250 78% 60%; /* indigo */
-    --primary-foreground: 0 0% 100%;
+    --primary: 163 33% 27%; /* #2f5d50 deep green */
+    --primary-foreground: 40 36% 95%;
+    --primary-hover: 167 35% 21%; /* #234840 pressed */
 
-    --secondary: 250 30% 95%;
-    --secondary-foreground: 250 40% 32%;
+    --secondary: 40 36% 95%; /* #f7f4ee sunken */
+    --secondary-foreground: 37 12% 21%;
 
-    --muted: 250 24% 95%;
-    --muted-foreground: 244 10% 44%;
+    --muted: 42 31% 94%; /* #f4f1ea quiet panel */
+    --muted-foreground: 36 7% 41%; /* #6f6960 */
 
-    --accent: 250 70% 96%;
-    --accent-foreground: 250 55% 40%;
+    --accent: 144 17% 94%; /* #eef3f0 green tint */
+    --accent-foreground: 163 33% 27%;
+    --accent-border: 148 16% 84%; /* #cfdcd5 */
+    --accent-mid: 156 16% 67%; /* #9db8ad in-progress */
 
-    --destructive: 2 72% 55%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 7 38% 53%; /* #b4655a */
+    --destructive-foreground: 40 36% 95%;
+    --destructive-tint: 11 44% 95%; /* #f8efed */
 
-    --success: 168 64% 34%; /* teal — mastery */
-    --success-foreground: 0 0% 100%;
+    /* Mastery reads in the accent green — there is no separate success hue. */
+    --success: 163 33% 27%;
+    --success-foreground: 40 36% 95%;
+    --warning: 32 45% 42%;
+    --warning-foreground: 40 36% 95%;
 
-    --warning: 36 92% 46%; /* amber */
-    --warning-foreground: 40 45% 12%;
+    --border: 39 23% 85%; /* #e2dcd1 */
+    --border-strong: 39 17% 77%; /* #cfc8bb */
+    --border-soft: 39 30% 91%; /* #efeae1 hairline */
+    --input: 38 22% 83%; /* #ded7cb */
+    --ring: 163 33% 27%;
 
-    --border: 250 22% 90%;
-    --input: 250 22% 89%;
-    --ring: 250 78% 60%;
+    --track: 39 29% 88%; /* #eae4d9 meter track */
+    --faint: 34 6% 51%; /* #8a837a */
+    --fainter: 34 11% 62%; /* #a89f93 */
 
-    /* Brand gradient stops (indigo → violet → cyan). */
-    --brand: 250 78% 60%;
-    --brand-2: 275 72% 62%;
-    --brand-3: 200 90% 52%;
-
-    --radius: 0.85rem;
-  }
-
-  .dark {
-    --background: 245 32% 8%;
-    --foreground: 250 30% 92%;
-
-    --card: 246 28% 12%;
-    --card-foreground: 250 30% 92%;
-
-    --popover: 246 28% 13%;
-    --popover-foreground: 250 30% 92%;
-
-    --primary: 252 90% 72%;
-    --primary-foreground: 245 45% 9%;
-
-    --secondary: 245 20% 20%;
-    --secondary-foreground: 250 30% 92%;
-
-    --muted: 245 20% 18%;
-    --muted-foreground: 250 14% 66%;
-
-    --accent: 250 40% 24%;
-    --accent-foreground: 252 85% 88%;
-
-    --destructive: 2 70% 62%;
-    --destructive-foreground: 0 0% 100%;
-
-    --success: 168 58% 50%;
-    --success-foreground: 245 45% 9%;
-
-    --warning: 38 92% 58%;
-    --warning-foreground: 40 45% 10%;
-
-    --border: 245 18% 22%;
-    --input: 245 18% 24%;
-    --ring: 252 90% 72%;
-
-    --brand: 252 90% 72%;
-    --brand-2: 278 85% 74%;
-    --brand-3: 198 90% 62%;
+    /* Flat and square — the design draws with rules, not corners. */
+    --radius: 0px;
   }
 }
 
@@ -96,53 +66,81 @@
   }
   body {
     @apply bg-background text-foreground antialiased;
-    font-feature-settings: "cv11", "ss01";
   }
-  h1, h2, h3, .font-display {
-    font-family: var(--font-display), var(--font-inter), system-ui, sans-serif;
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: var(--font-display), Georgia, serif;
+    font-weight: 500;
+    letter-spacing: -0.01em;
   }
-  /* Generous line-height on lesson prose. */
-  .prose-lesson {
-    line-height: 1.75;
+  /* Themed focus, never the browser default. */
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 1px;
+  }
+  ::selection {
+    background: hsl(var(--accent-border));
+  }
+  a {
+    color: hsl(var(--primary));
+    text-underline-offset: 2px;
   }
 }
 
 @layer components {
-  /* Aurora canvas: soft brand light-sources bleeding in from the edges. Reads on
-     both themes because it's built from brand tokens over the background. */
-  .bg-aurora {
-    background-color: hsl(var(--background));
-    background-image:
-      radial-gradient(42rem 42rem at 12% -12%, hsl(var(--brand) / 0.18), transparent 60%),
-      radial-gradient(38rem 38rem at 105% 0%, hsl(var(--brand-2) / 0.16), transparent 55%),
-      radial-gradient(34rem 34rem at 50% 118%, hsl(var(--brand-3) / 0.12), transparent 60%);
+  /* The uppercase mono micro-label that titles nearly every block. */
+  .kicker {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 0.6875rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: hsl(var(--muted-foreground));
   }
-  .dark .bg-aurora {
-    background-image:
-      radial-gradient(42rem 42rem at 12% -12%, hsl(var(--brand) / 0.22), transparent 60%),
-      radial-gradient(38rem 38rem at 105% 0%, hsl(var(--brand-2) / 0.20), transparent 55%),
-      radial-gradient(34rem 34rem at 50% 118%, hsl(var(--brand-3) / 0.14), transparent 60%);
+  .kicker-sm {
+    font-size: 0.625rem;
+    letter-spacing: 0.14em;
+    color: hsl(var(--faint));
   }
 
-  /* Indigo→violet text for headlines and the wordmark. */
-  .text-gradient {
-    background-image: linear-gradient(
-      100deg,
-      hsl(var(--brand)),
-      hsl(var(--brand-2)) 55%,
-      hsl(var(--brand-3))
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+  /* A sheet of paper: the standard content surface. */
+  .sheet {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+  }
+  .sheet-raised {
+    box-shadow:
+      0 1px 0 hsl(var(--border-soft)),
+      0 18px 40px -34px hsl(var(--foreground) / 0.4);
   }
 
-  /* Subtle raise on hover for interactive cards. */
-  .hover-lift {
-    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  /* The quiet aside used for instructions, consent and study information. */
+  .note-panel {
+    background: hsl(var(--muted));
+    border-left: 2px solid hsl(var(--border-strong));
   }
-  .hover-lift:hover {
-    transform: translateY(-2px);
+
+  /* Long-form lesson prose. */
+  .prose-lesson {
+    line-height: 1.7;
+  }
+}
+
+@layer utilities {
+  .animate-paper-in {
+    animation: paper-in 0.25s ease both;
+  }
+}
+
+@keyframes paper-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
 

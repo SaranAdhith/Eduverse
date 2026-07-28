@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import { McqItem, type ChoiceLabel, type McqReveal } from "@/components/McqItem";
 import type { Choice } from "@/lib/types";
 
@@ -28,6 +27,8 @@ interface McqQuizProps {
   reveal?: McqReveal | null;
   onNext?: () => void;
   nextLabel?: string;
+  /** Right-hand mono note on the progress rule, e.g. "estimate 0.42 → 0.55". */
+  progressNote?: string;
 }
 
 export function McqQuiz({
@@ -43,17 +44,32 @@ export function McqQuiz({
   reveal = null,
   onNext,
   nextLabel = "Next",
+  progressNote,
 }: McqQuizProps) {
   return (
-    <div className="mx-auto w-full max-w-2xl space-y-8">
-      <div className="space-y-2">
-        <p className="text-sm font-medium text-muted-foreground">
-          {progressLabel}
-        </p>
-        <Progress
-          value={progressValue}
+    <div className="w-full animate-paper-in">
+      <div className="mb-8">
+        <div className="mb-2.5 flex items-baseline justify-between gap-4">
+          <span className="kicker kicker-sm">{progressLabel}</span>
+          {progressNote ? (
+            <span className="font-mono text-[11px] text-faint">
+              {progressNote}
+            </span>
+          ) : null}
+        </div>
+        <div
+          className="h-1 w-full bg-track"
+          role="progressbar"
+          aria-valuenow={Math.round(progressValue)}
+          aria-valuemin={0}
+          aria-valuemax={100}
           aria-label={progressLabel}
-        />
+        >
+          <div
+            className="h-full bg-primary transition-[width] duration-300"
+            style={{ width: `${progressValue}%` }}
+          />
+        </div>
       </div>
 
       <McqItem
@@ -67,15 +83,13 @@ export function McqQuiz({
         reveal={reveal}
       />
 
-      <div className="flex justify-end">
+      <div className="mt-8 flex justify-start">
         {reveal && onNext ? (
-          <Button size="lg" variant="brand" onClick={onNext}>
+          <Button variant="ink" onClick={onNext}>
             {nextLabel}
           </Button>
         ) : (
           <Button
-            size="lg"
-            variant="brand"
             onClick={onSubmit}
             disabled={selected === null || submitting}
           >

@@ -2,16 +2,14 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
+// A sheet of paper: square, 1px rule, warm white on the paper ground.
 const Card = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn(
-      "rounded-xl border bg-card text-card-foreground shadow-card",
-      className,
-    )}
+    className={cn("border border-border bg-card text-card-foreground", className)}
     {...props}
   />
 ));
@@ -23,7 +21,10 @@ const CardHeader = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("flex flex-col space-y-1.5 p-6", className)}
+    className={cn(
+      "flex flex-col space-y-1.5 border-b border-border-soft px-6 py-5",
+      className,
+    )}
     {...props}
   />
 ));
@@ -35,7 +36,7 @@ const CardTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("text-lg font-semibold leading-none tracking-tight", className)}
+    className={cn("font-display text-[22px] leading-tight", className)}
     {...props}
   />
 ));
@@ -47,7 +48,7 @@ const CardDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("text-sm text-muted-foreground", className)}
+    className={cn("text-[13px] text-muted-foreground", className)}
     {...props}
   />
 ));
@@ -57,7 +58,7 @@ const CardContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+  <div ref={ref} className={cn("px-6 py-5", className)} {...props} />
 ));
 CardContent.displayName = "CardContent";
 
@@ -67,7 +68,10 @@ const CardFooter = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("flex items-center p-6 pt-0", className)}
+    className={cn(
+      "flex items-center border-t border-border-soft px-6 py-4",
+      className,
+    )}
     {...props}
   />
 ));

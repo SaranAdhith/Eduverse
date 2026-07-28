@@ -7,9 +7,12 @@ test("resume continues the diagnostic where it left off", async ({
   context,
 }) => {
   await page.goto("/");
-  await page.getByRole("link", { name: /start as new participant/i }).click();
+  await page.getByRole("link", { name: /enrol and begin/i }).click();
   await page.getByLabel(/i have read the above and consent/i).click();
-  await page.getByRole("button", { name: /generate my code/i }).click();
+  await page
+    .getByRole("button", { name: /consent and begin placement/i })
+    .click();
+  await page.getByRole("button", { name: /begin placement paper/i }).click();
   await expect(page).toHaveURL(/\/diagnostic/);
 
   // Answer the first 5 items.
@@ -19,7 +22,7 @@ test("resume continues the diagnostic where it left off", async ({
     ).toBeVisible();
     await page.getByRole("radio").first().check();
     await page.getByRole("button", { name: /submit answer/i }).click();
-    await page.getByRole("button", { name: /next question/i }).click();
+    await page.getByRole("button", { name: /^continue$/i }).click();
   }
 
   // Recover the stored code, then simulate a fresh tab.
@@ -32,7 +35,7 @@ test("resume continues the diagnostic where it left off", async ({
   const fresh = await context.newPage();
   await fresh.goto("/resume");
   await fresh.getByLabel(/participant code/i).fill(code as string);
-  await fresh.getByRole("button", { name: /^resume$/i }).click();
+  await fresh.getByRole("button", { name: /resume session/i }).click();
 
   // Resume routes to the dashboard; opening the diagnostic again picks up at 6.
   await expect(fresh).toHaveURL(/\/dashboard/);

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import { useParticipant } from "@/lib/store";
+import { useJournal, useParticipant } from "@/lib/store";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [client] = useState(
@@ -18,12 +18,14 @@ export function Providers({ children }: { children: React.ReactNode }) {
       }),
   );
   const hydrate = useParticipant((s) => s.hydrate);
+  const hydrateJournal = useJournal((s) => s.hydrate);
 
-  // Load the persisted participant code once, on the client, to avoid a
-  // hydration mismatch (DOC_07 §5).
+  // Load the persisted participant code and progress journal once, on the
+  // client, to avoid a hydration mismatch (DOC_07 §5).
   useEffect(() => {
     hydrate();
-  }, [hydrate]);
+    hydrateJournal();
+  }, [hydrate, hydrateJournal]);
 
   return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
 }

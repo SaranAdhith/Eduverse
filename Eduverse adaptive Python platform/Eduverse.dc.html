@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; background: #f2eee5; }
+  * { box-sizing: border-box; }
+  a { color: #2f5d50; text-decoration: underline; text-underline-offset: 2px; }
+  a:hover { color: #1f3f36; }
+  input:focus { outline: 2px solid #2f5d50; outline-offset: 1px; }
+  ::selection { background: #d9e5df; }
+  @keyframes eduFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+</style>
+</helmet>
+
+<div style="min-height: 100vh; background: #f2eee5; color: #1b1a17; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 15px; line-height: 1.55;">
+
+  <sc-if value="{{ isEnroll }}" hint-placeholder-val="{{ true }}">
+    <div style="display: grid; grid-template-columns: 1.05fr 0.95fr; min-height: 100vh;">
+      <div style="padding: 72px 64px; display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid #e2dcd1;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 13px; height: 13px; background: #2f5d50;"></div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: #6f6960;">Eduverse</div>
+        </div>
+        <div style="max-width: 520px; display: flex; flex-direction: column; gap: 22px;">
+          <h1 style="font-family: Spectral, Georgia, serif; font-weight: 500; font-size: 52px; line-height: 1.08; margin: 0; letter-spacing: -0.015em;">An adaptive path through Python.</h1>
+          <p style="margin: 0; font-size: 17px; color: #4a453e; max-width: 460px; text-wrap: pretty;">Eduverse estimates how well you understand each of 47 Python topics and chooses what you work on next. Nothing is graded. The estimate moves with every answer, and you move on when it is confident enough.</p>
+          <div style="display: flex; gap: 28px; padding-top: 6px;">
+            <div style="display: flex; flex-direction: column; gap: 3px;">
+              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 26px;">47</div>
+              <div style="font-size: 12px; color: #6f6960; letter-spacing: 0.06em;">topics</div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 3px;">
+              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 26px;">6</div>
+              <div style="font-size: 12px; color: #6f6960; letter-spacing: 0.06em;">tiers</div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 3px;">
+              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 26px;">0.85</div>
+              <div style="font-size: 12px; color: #6f6960; letter-spacing: 0.06em;">mastery threshold</div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size: 12.5px; color: #8a837a; max-width: 460px;">Department of Computing &middot; MSc research prototype &middot; Ethics ref. CS-2026-118</div>
+      </div>
+
+      <div style="padding: 72px 64px; display: flex; align-items: center;">
+        <div style="width: 100%; max-width: 420px; background: #fffdf9; border: 1px solid #e2dcd1; padding: 34px 34px 30px;">
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #6f6960;">Enrolment</div>
+          <h2 style="font-family: Spectral, Georgia, serif; font-weight: 500; font-size: 25px; margin: 12px 0 8px;">Enter your participant code</h2>
+          <p style="margin: 0 0 22px; font-size: 14px; color: #6f6960;">No account, no email address. Your code is the only identifier stored with your responses.</p>
+          <label style="display: block; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: #6f6960; margin-bottom: 7px;">Participant code</label>
+          <input value="{{ code }}" onChange="{{ onCode }}" placeholder="P001" style="width: 100%; font-family: 'IBM Plex Mono', monospace; font-size: 20px; letter-spacing: 0.1em; padding: 12px 14px; border: 1px solid #cfc8bb; background: #f7f4ee; color: #1b1a17;" />
+          <div style="margin: 20px 0 24px; padding: 16px; background: #f4f1ea; border-left: 2px solid #cfc8bb; font-size: 13px; color: #5a544c; display: flex; flex-direction: column; gap: 9px;">
+            <div>Your answers, response times and topic sequence are recorded for research purposes.</div>
+            <div>You may stop at any point. Withdrawn data is deleted within 30 days.</div>
+          </div>
+          <button onClick="{{ onEnrol }}" style="width: 100%; padding: 14px; background: #2f5d50; color: #f7f4ee; border: none; font-family: 'IBM Plex Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; letter-spacing: 0.01em;" style-hover="background: #234840;">Consent and begin placement</button>
+          <div style="margin-top: 14px; font-size: 12px; color: #8a837a; text-align: center;">Takes about 3 minutes.</div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isPlacement }}" hint-placeholder-val="{{ false }}">
+    <div style="min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 56px 32px 80px;">
+      <div style="width: 100%; max-width: 860px;">
+
+        <sc-if value="{{ placeActive }}" hint-placeholder-val="{{ true }}">
+          <div style="background: #fffdf9; border: 1px solid #e2dcd1; box-shadow: 0 1px 0 #e7e1d6, 0 18px 40px -34px rgba(27,26,23,0.4); animation: eduFade 0.25s ease both;">
+
+            <div style="padding: 44px 56px 26px; border-bottom: 2px solid #1b1a17;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 24px;">
+                <div>
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #6f6960;">Eduverse &middot; Placement diagnostic</div>
+                  <h1 style="font-family: Spectral, Georgia, serif; font-weight: 500; font-size: 34px; margin: 12px 0 0; letter-spacing: -0.01em;">Python placement paper</h1>
+                </div>
+                <div style="text-align: right; display: flex; flex-direction: column; gap: 3px; padding-top: 4px;">
+                  <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a837a;">Participant</div>
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 17px; letter-spacing: 0.08em;">{{ code }}</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid #e2dcd1;">
+              <div style="padding: 14px 20px 14px 56px; border-right: 1px solid #efeae1;">
+                <div style="font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a837a; margin-bottom: 3px;">Questions</div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 14px;">6</div>
+              </div>
+              <div style="padding: 14px 20px; border-right: 1px solid #efeae1;">
+                <div style="font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a837a; margin-bottom: 3px;">Time limit</div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 14px;">None</div>
+              </div>
+              <div style="padding: 14px 20px; border-right: 1px solid #efeae1;">
+                <div style="font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a837a; margin-bottom: 3px;">Marks</div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 14px;">Not graded</div>
+              </div>
+              <div style="padding: 14px 56px 14px 20px;">
+                <div style="font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a837a; margin-bottom: 3px;">Answered</div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 14px;">{{ placeCounter }}</div>
+              </div>
+            </div>
+
+            <div style="padding: 26px 56px 0;">
+              <div style="background: #f4f1ea; border-left: 2px solid #cfc8bb; padding: 15px 18px; font-size: 13.5px; color: #5a544c; line-height: 1.6;">
+                <strong style="font-weight: 500;">Instructions.</strong> Answer as many questions as you can, in any order. Leave a question blank if you have not met the material &mdash; blank answers are expected and cost you nothing. Nothing here is graded; the paper only sets a starting point for your curriculum.
+              </div>
+            </div>
+
+            <sc-for list="{{ paper }}" as="item" hint-placeholder-count="6">
+              <div style="padding: 34px 56px 30px; border-bottom: 1px solid #efeae1;">
+                <div style="display: grid; grid-template-columns: 44px 1fr; gap: 4px 18px;">
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; color: #8a837a; padding-top: 2px;">{{ item.num }}</div>
+                  <div style="min-width: 0;">
+                    <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 20px; margin-bottom: 14px;">
+                      <div style="font-family: Spectral, Georgia, serif; font-size: 20px; line-height: 1.4; text-wrap: pretty;">{{ item.prompt }}</div>
+                      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: #a89f93; white-space: nowrap;">{{ item.tierLabel }}</div>
+                    </div>
+                    <pre style="font-family: 'IBM Plex Mono', monospace; font-size: 13.5px; line-height: 1.75; background: #f7f4ee; border: 1px solid #e7e1d6; padding: 16px 18px; margin: 0 0 18px; overflow-x: auto; overflow-y: hidden;">{{ item.code }}</pre>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                      <sc-for list="{{ item.choices }}" as="ch" hint-placeholder-count="4">
+                        <button onClick="{{ ch.onClick }}" style="{{ ch.style }}" style-hover="border-color: #9db8ad;">
+                          <span style="{{ ch.keyStyle }}">{{ ch.key }}</span>
+                          <span style="flex: 1; text-align: left;">{{ ch.label }}</span>
+                        </button>
+                      </sc-for>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </sc-for>
+
+            <div style="padding: 26px 56px 40px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;">
+              <div style="font-size: 13.5px; color: #6f6960;">{{ placeAnsweredLine }}</div>
+              <div style="display: flex; align-items: center; gap: 18px;">
+                <button onClick="{{ onPlaceClear }}" style="background: none; border: none; padding: 0; font-family: 'IBM Plex Sans', sans-serif; font-size: 13.5px; color: #6f6960; text-decoration: underline; text-underline-offset: 3px; cursor: pointer;" style-hover="color: #1b1a17;">Clear all answers</button>
+                <button onClick="{{ onPlaceSubmit }}" style="padding: 14px 28px; background: #2f5d50; color: #f7f4ee; border: none; font-family: 'IBM Plex Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer;" style-hover="background: #234840;">Submit paper</button>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ placeDone }}" hint-placeholder-val="{{ false }}">
+          <div style="animation: eduFade 0.3s ease both;">
+            <h2 style="font-family: Spectral, Georgia, serif; font-weight: 500; font-size: 32px; margin: 0 0 12px;">Starting estimates set.</h2>
+            <p style="margin: 0 0 28px; font-size: 16px; color: #4a453e; max-width: 560px;">These are first guesses, not verdicts. They will move as soon as you start answering.</p>
+            <div style="border: 1px solid #e2dcd1; background: #fffdf9;">
+              <sc-for list="{{ placeSummary }}" as="row" hint-placeholder-count="6">
+                <div style="display: grid; grid-template-columns: 26px 1fr 120px 56px; align-items: center; gap: 16px; padding: 13px 18px; border-bottom: 1px solid #efeae1;">
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #8a837a;">{{ row.tier }}</div>
+                  <div style="font-size: 14px;">{{ row.name }}</div>
+                  <div style="height: 5px; background: #eae4d9;"><div style="{{ row.barStyle }}"></div></div>
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; text-align: right; color: #4a453e;">{{ row.value }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <button onClick="{{ onEnterApp }}" style="margin-top: 28px; padding: 14px 26px; background: #2f5d50; color: #f7f4ee; border: none; font-family: 'IBM Plex Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer;" style-hover="background: #234840;">Start learning</button>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isApp }}" hint-placeholder-val="{{ false }}">
+    <div style="display: grid; grid-template-columns: 246px 1fr; min-height: 100vh;">
+
+      <aside style="border-right: 1px solid #e2dcd1; padding: 26px 0 22px; display: flex; flex-direction: column; justify-content: space-between; position: sticky; top: 0; height: 100vh;">
+        <div style="display: flex; flex-direction: column; gap: 30px;">
+          <div style="display: flex; align-items: center; gap: 10px; padding: 0 24px;">
+            <div style="width: 13px; height: 13px; background: #2f5d50;"></div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: #6f6960;">Eduverse</div>
+          </div>
+          <nav style="display: flex; flex-direction: column;">
+            <sc-for list="{{ navItems }}" as="nav" hint-placeholder-count="3">
+              <button onClick="{{ nav.onClick }}" style="{{ nav.style }}" style-hover="color: #1b1a17;">
+                <span>{{ nav.label }}</span>
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #8a837a;">{{ nav.meta }}</span>
+              </button>
+            </sc-for>
+          </nav>
+          <div style="padding: 0 24px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #8a837a;">Curriculum progress</div>
+            <div style="height: 6px; background: #eae4d9;"><div style="{{ overallBarStyle }}"></div></div>
+            <div style="display: flex; justify-content: space-between; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #6f6960;">
+              <span>{{ masteredCount }} of 47 mastered</span>
+            </div>
+          </div>
+        </div>
+        <div style="padding: 0 24px; display: flex; flex-direction: column; gap: 10px;">
+          <div style="border-top: 1px solid #e2dcd1; padding-top: 16px; display: flex; flex-direction: column; gap: 4px;">
+            <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a837a;">Participant</div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 16px; letter-spacing: 0.08em;">{{ code }}</div>
+            <div style="font-size: 12.5px; color: #6f6960;">{{ sidebarName }}</div>
+          </div>
+          <div style="font-size: 11.5px; color: #8a837a; line-height: 1.5;">Session recorded for research. <a href="#consent">Study information</a></div>
+        </div>
+      </aside>
+
+      <main style="min-width: 0;">
+
+        <sc-if value="{{ tabSession }}" hint-placeholder-val="{{ true }}">
+          <div style="max-width: 880px; padding: 40px 56px 90px;">
+            <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 34px;">
+              <div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #6f6960; margin-bottom: 8px;">Current topic &middot; Tier {{ topic.tier }}</div>
+                <h1 style="font-family: Spectral, Georgia, serif; font-weight: 500; font-size: 36px; margin: 0; letter-spacing: -0.01em;">{{ topic.name }}</h1>
+              </div>
+              <div style="text-align: right; display: flex; flex-direction: column; gap: 4px;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #8a837a;">Session</div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: #4a453e;">{{ elapsed }} &middot; {{ itemsAnswered }} items</div>
+              </div>
+            </div>
+
+            <div style="border: 1px solid #e2dcd1; background: #fffdf9; padding: 20px 24px; margin-bottom: 28px;">
+              <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px;">
+                <div style="font-size: 13px; color: #6f6960;">Estimated probability you have mastered this topic</div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 22px; color: #1b1a17;">{{ topicP }}</div>
+              </div>
+              <div style="position: relative; height: 10px; background: #eae4d9;">
+                <div style="{{ topicBarStyle }}"></div>
+                <div style="position: absolute; left: 85%; top: -5px; bottom: -5px; width: 1px; background: #1b1a17;"></div>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-top: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #8a837a;">
+                <span>0.00</span>
+                <span>{{ deltaLabel }}</span>
+                <span>threshold 0.85 &rarr;</span>
+              </div>
+            </div>
+
+            <sc-if value="{{ showCleared }}" hint-placeholder-val="{{ false }}">
+              <div style="border: 1px solid #2f5d50; background: #eef3f0; padding: 30px 32px; animation: eduFade 0.3s ease both;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #2f5d50; margin-bottom: 10px;">Threshold cleared</div>
+                <h2 style="font-family: Spectral, Georgia, serif; font-weight: 500; font-size: 28px; margin: 0 0 10px;">{{ clearedName }}</h2>
+                <p style="margin: 0 0 24px; font-size: 15px; color: #4a453e; max-width: 520px;">The estimate reached {{ clearedValue }} after {{ clearedItems }} items. This topic will resurface later for a short check.</p>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                  <button onClick="{{ onNextTopic }}" style="padding: 12px 22px; background: #2f5d50; color: #f7f4ee; border: none; font-family: 'IBM Plex Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer;" style-hover="background: #234840;">Continue to next topic</button>
+                  <span style="font-size: 13.5px; color: #6f6960;">Next: {{ nextTopicName }}</span>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ showQuestion }}" hint-placeholder-val="{{ true }}">
+              <div style="animation: eduFade 0.25s ease both;">
+                <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px;">
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a837a;">{{ qKindLabel }}</div>
+                </div>
+                <h2 style="font-family: Spectral, Georgia, serif; font-weight: 500; font-size: 25px; line-height: 1.35; margin: 0 0 20px; max-width: 700px; text-wrap: pretty;">{{ q.prompt }}</h2>
+                <sc-if value="{{ q.code }}" hint-placeholder-val="{{ true }}">
+                  <pre style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; line-height: 1.75; background: #fffdf9; border: 1px solid #e2dcd1; padding: 18px 20px; margin: 0 0 22px; overflow-x: auto; overflow-y: hidden;">{{ q.code }}</pre>
+                </sc-if>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                  <sc-for list="{{ choices }}" as="ch" hint-placeholder-count="4">
+                    <button onClick="{{ ch.onClick }}" style="{{ ch.style }}" style-hover="border-color: #2f5d50;">
+                      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #8a837a; min-width: 16px;">{{ ch.key }}</span>
+                      <span style="flex: 1;">{{ ch.label }}</span>
+                      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #6f6960;">{{ ch.mark }}</span>
+                    </button>
+                  </sc-for>
+                </div>
+
+                <sc-if value="{{ revealed }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top: 26px; border-top: 1px solid #e2dcd1; padding-top: 22px; animation: eduFade 0.25s ease both;">
+                    <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px;">
+                      <div style="{{ verdictStyle }}">{{ verdictLabel }}</div>
+                      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: #6f6960;">estimate {{ beforeP }} &rarr; {{ afterP }}</div>
+                    </div>
+                    <p style="margin: 0 0 22px; font-size: 15.5px; color: #3d3830; max-width: 640px; text-wrap: pretty;">{{ q.explain }}</p>
+                    <button onClick="{{ onContinue }}" style="padding: 12px 22px; background: #1b1a17; color: #f7f4ee; border: none; font-family: 'IBM Plex Sans', sans-serif; font-size: 15px; cursor: pointer;" style-hover="background: #3d3830;">Continue</button>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-if>
+
+            <div style="margin-top: 46px; padding-top: 20px; border-top: 1px solid #e2dcd1; display: flex; gap: 40px;">
+              <div style="max-width: 340px;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #8a837a; margin-bottom: 8px;">Why this topic</div>
+                <div style="font-size: 13.5px; color: #6f6960; line-height: 1.6;">Selected for you from the topics whose prerequisites you have already cleared.</div>
+              </div>
+              <div style="max-width: 340px;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #8a837a; margin-bottom: 8px;">Prerequisites</div>
+                <div style="font-size: 13.5px; color: #6f6960; line-height: 1.6;">{{ prereqLine }}</div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ tabMap }}" hint-placeholder-val="{{ false }}">
+          <div style="padding: 40px 56px 90px;">
+            <div style="display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 8px;">
+              <h1 style="font-family: Spectral, Georgia, serif; font-weight: 500; font-size: 36px; margin: 0;">Curriculum</h1>
+              <div style="display: flex; gap: 18px; align-items: center; font-size: 12.5px; color: #6f6960;">
+                <div style="display: flex; align-items: center; gap: 7px;"><span style="width: 10px; height: 10px; background: #2f5d50; display: inline-block;"></span>mastered</div>
+                <div style="display: flex; align-items: center; gap: 7px;"><span style="width: 10px; height: 10px; background: #9db8ad; display: inline-block;"></span>in progress</div>
+                <div style="display: flex; align-items: center; gap: 7px;"><span style="width: 10px; height: 10px; background: #e2dcd1; display: inline-block;"></span>not started</div>
+              </div>
+            </div>
+            <p style="margin: 0 0 34px; font-size: 15px; color: #6f6960; max-width: 620px;">Forty-seven topics in six tiers. Each topic unlocks once the tier before it is largely in hand; the height of the fill is the current mastery estimate.</p>
+
+            <div style="display: flex; flex-direction: column; gap: 30px;">
+              <sc-for list="{{ tiers }}" as="tier" hint-placeholder-count="6">
+                <div style="display: grid; grid-template-columns: 180px 1fr; gap: 28px; align-items: start; padding-bottom: 28px; border-bottom: 1px solid #e7e1d6;">
+                  <div style="position: sticky; top: 24px;">
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #8a837a;">Tier {{ tier.num }}</div>
+                    <div style="font-family: Spectral, Georgia, serif; font-size: 21px; margin-top: 4px;">{{ tier.name }}</div>
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #6f6960; margin-top: 8px;">{{ tier.stat }}</div>
+                  </div>
+                  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(196px, 1fr)); gap: 10px;">
+                    <sc-for list="{{ tier.topics }}" as="tp" hint-placeholder-count="8">
+                      <button onClick="{{ tp.onClick }}" style="{{ tp.style }}" style-hover="border-color: #9db8ad;">
+                        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 10px;">
+                          <span style="font-size: 13.5px; text-align: left; line-height: 1.35;">{{ tp.name }}</span>
+                          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #6f6960;">{{ tp.value }}</span>
+                        </div>
+                        <div style="height: 4px; background: #eae4d9; margin-top: 10px;"><div style="{{ tp.barStyle }}"></div></div>
+                      </button>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ tabProfile }}" hint-placeholder-val="{{ false }}">
+          <div style="padding: 40px 56px 90px; max-width: 1080px;">
+            <div style="display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 30px;">
+              <div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #6f6960; margin-bottom: 8px;">Participant {{ code }}{{ courseSuffix }}</div>
+                <h1 style="font-family: Spectral, Georgia, serif; font-weight: 500; font-size: 36px; margin: 0;">{{ profileTitle }}</h1>
+              </div>
+              <div style="font-size: 13px; color: #8a837a;">Enrolled today &middot; session {{ elapsed }}</div>
+            </div>
+
+            <div style="border: 1px solid #e2dcd1; background: #fffdf9; margin-bottom: 26px;">
+              <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 20px; padding: 20px 24px 16px; border-bottom: 1px solid #efeae1;">
+                <h2 style="font-family: Spectral, Georgia, serif; font-weight: 500; font-size: 22px; margin: 0;">Participant details</h2>
+                <div style="font-size: 12.5px; color: #8a837a;">Optional &middot; used only to send you your results</div>
+              </div>
+              <div style="display: grid; grid-template-columns: 92px 1fr; gap: 24px; padding: 24px;">
+                <div style="width: 92px; height: 92px; background: #eef3f0; border: 1px solid #cfdcd5; display: flex; align-items: center; justify-content: center; font-family: Spectral, Georgia, serif; font-size: 34px; color: #2f5d50;">{{ monogram }}</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px 20px;">
+                  <div>
+                    <label style="display: block; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #8a837a; margin-bottom: 6px;">Full name</label>
+                    <input value="{{ pName }}" onChange="{{ onName }}" placeholder="Your name" style="width: 100%; font-family: 'IBM Plex Sans', sans-serif; font-size: 15px; padding: 10px 12px; border: 1px solid #ded7cb; background: #f7f4ee; color: #1b1a17;" />
+                  </div>
+                  <div>
+                    <label style="display: block; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #8a837a; margin-bottom: 6px;">Email address</label>
+                    <input value="{{ pEmail }}" onChange="{{ onEmail }}" placeholder="you@university.edu" style="width: 100%; font-family: 'IBM Plex Sans', sans-serif; font-size: 15px; padding: 10px 12px; border: 1px solid #ded7cb; background: #f7f4ee; color: #1b1a17;" />
+                  </div>
+                  <div>
+                    <label style="display: block; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #8a837a; margin-bottom: 6px;">Course of study</label>
+                    <input value="{{ pCourse }}" onChange="{{ onCourse }}" placeholder="e.g. MSc Data Science" style="width: 100%; font-family: 'IBM Plex Sans', sans-serif; font-size: 15px; padding: 10px 12px; border: 1px solid #ded7cb; background: #f7f4ee; color: #1b1a17;" />
+                  </div>
+                  <div style="display: flex; align-items: flex-end; gap: 14px;">
+                    <button onClick="{{ onSaveProfile }}" style="padding: 11px 22px; background: #2f5d50; color: #f7f4ee; border: none; font-family: 'IBM Plex Sans', sans-serif; font-size: 14.5px; font-weight: 500; cursor: pointer;" style-hover="background: #234840;">Save details</button>
+                    <span style="{{ savedStyle }}">{{ savedLabel }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid #e2dcd1; background: #fffdf9; margin-bottom: 34px;">
+              <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+                <div style="padding: 20px 22px; border-right: 1px solid #efeae1; display: flex; flex-direction: column; gap: 6px;">
+                  <div style="font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: #8a837a;">{{ s.label }}</div>
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 27px; line-height: 1.1;">{{ s.value }}</div>
+                  <div style="font-size: 12.5px; color: #6f6960;">{{ s.note }}</div>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="border: 1px solid #e2dcd1; background: #fffdf9; padding: 26px 28px 20px; margin-bottom: 34px;">
+              <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+                <h2 style="font-family: Spectral, Georgia, serif; font-weight: 500; font-size: 22px; margin: 0;">Learning curve</h2>
+                <div style="font-size: 12.5px; color: #8a837a;">mean mastery across all attempted topics, per item answered</div>
+              </div>
+              <sc-if value="{{ hasCurve }}" hint-placeholder-val="{{ true }}">
+                <svg viewBox="0 0 760 220" style="width: 100%; height: 240px; display: block; overflow: visible;">
+                  <line x1="46" y1="20" x2="746" y2="20" stroke="#efeae1" stroke-width="1"></line>
+                  <line x1="46" y1="60" x2="746" y2="60" stroke="#efeae1" stroke-width="1"></line>
+                  <line x1="46" y1="100" x2="746" y2="100" stroke="#efeae1" stroke-width="1"></line>
+                  <line x1="46" y1="140" x2="746" y2="140" stroke="#efeae1" stroke-width="1"></line>
+                  <line x1="46" y1="180" x2="746" y2="180" stroke="#cfc8bb" stroke-width="1"></line>
+                  <line x1="46" y1="44" x2="746" y2="44" stroke="#1b1a17" stroke-width="1" stroke-dasharray="3 4"></line>
+                  <text x="752" y="47" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1b1a17">0.85</text>
+                  <text x="36" y="24" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10" fill="#8a837a">1.0</text>
+                  <text x="36" y="104" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10" fill="#8a837a">0.5</text>
+                  <text x="36" y="184" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10" fill="#8a837a">0.0</text>
+                  <polyline points="{{ curveArea }}" fill="#eef3f0" stroke="none"></polyline>
+                  <polyline points="{{ curvePoints }}" fill="none" stroke="#2f5d50" stroke-width="2" stroke-linejoin="round"></polyline>
+                  <sc-for list="{{ curveDots }}" as="d" hint-placeholder-count="0">
+                    <circle cx="{{ d.x }}" cy="{{ d.y }}" r="3" fill="{{ d.fill }}" stroke="#fffdf9" stroke-width="1.5"></circle>
+                  </sc-for>
+                  <text x="46" y="204" font-family="IBM Plex Mono, monospace" font-size="10" fill="#8a837a">item 1</text>
+                  <text x="746" y="204" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10" fill="#8a837a">{{ curveEndLabel }}</text>
+                </svg>
+                <div style="display: flex; gap: 22px; font-size: 12px; color: #6f6960; padding-top: 6px; border-top: 1px solid #efeae1;">
+                  <div style="display: flex; align-items: center; gap: 7px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #2f5d50; display: inline-block;"></span>correct response</div>
+                  <div style="display: flex; align-items: center; gap: 7px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #b4655a; display: inline-block;"></span>incorrect response</div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ noCurve }}" hint-placeholder-val="{{ false }}">
+                <div style="height: 200px; display: flex; align-items: center; justify-content: center; color: #8a837a; font-size: 14px; border: 1px dashed #ded7cb; margin-top: 16px;">Answer a few items and your curve will appear here.</div>
+              </sc-if>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 26px;">
+              <div style="border: 1px solid #e2dcd1; background: #fffdf9;">
+                <div style="padding: 20px 24px 14px; border-bottom: 1px solid #efeae1;">
+                  <h2 style="font-family: Spectral, Georgia, serif; font-weight: 500; font-size: 22px; margin: 0;">Topics attempted</h2>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 62px 78px 108px; gap: 12px; padding: 10px 24px; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #8a837a; border-bottom: 1px solid #efeae1;">
+                  <div>Topic</div><div style="text-align: right;">Items</div><div style="text-align: right;">Correct</div><div style="text-align: right;">Mastery</div>
+                </div>
+                <sc-for list="{{ attempted }}" as="row" hint-placeholder-count="5">
+                  <div style="display: grid; grid-template-columns: 1fr 62px 78px 108px; gap: 12px; padding: 12px 24px; align-items: center; border-bottom: 1px solid #f3efe7;">
+                    <div style="font-size: 14px;">{{ row.name }}</div>
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; text-align: right; color: #6f6960;">{{ row.items }}</div>
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; text-align: right; color: #6f6960;">{{ row.correct }}</div>
+                    <div style="display: flex; align-items: center; gap: 9px; justify-content: flex-end;">
+                      <div style="width: 54px; height: 5px; background: #eae4d9;"><div style="{{ row.barStyle }}"></div></div>
+                      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; min-width: 34px; text-align: right;">{{ row.value }}</span>
+                    </div>
+                  </div>
+                </sc-for>
+                <sc-if value="{{ noneAttempted }}" hint-placeholder-val="{{ false }}">
+                  <div style="padding: 34px 24px; color: #8a837a; font-size: 14px;">Nothing attempted yet.</div>
+                </sc-if>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 26px;">
+                <div style="border: 1px solid #e2dcd1; background: #fffdf9; padding: 22px 24px;">
+                  <h2 style="font-family: Spectral, Georgia, serif; font-weight: 500; font-size: 22px; margin: 0 0 18px;">By tier</h2>
+                  <div style="display: flex; flex-direction: column; gap: 14px;">
+                    <sc-for list="{{ tierStats }}" as="t" hint-placeholder-count="6">
+                      <div>
+                        <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px;">
+                          <span>{{ t.name }}</span>
+                          <span style="font-family: 'IBM Plex Mono', monospace; color: #6f6960;">{{ t.label }}</span>
+                        </div>
+                        <div style="height: 6px; background: #eae4d9;"><div style="{{ t.barStyle }}"></div></div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+                <div style="border: 1px solid #e2dcd1; background: #fffdf9; padding: 22px 24px;">
+                  <h2 style="font-family: Spectral, Georgia, serif; font-weight: 500; font-size: 22px; margin: 0 0 6px;">Worth revisiting</h2>
+                  <p style="margin: 0 0 16px; font-size: 13px; color: #6f6960;">Estimates that started to slip or never settled.</p>
+                  <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <sc-for list="{{ review }}" as="r" hint-placeholder-count="3">
+                      <div style="display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 10px; border-bottom: 1px solid #f3efe7;">
+                        <span style="font-size: 14px;">{{ r.name }}</span>
+                        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #b4655a;">{{ r.value }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                  <sc-if value="{{ noReview }}" hint-placeholder-val="{{ true }}">
+                    <div style="font-size: 13.5px; color: #8a837a;">Nothing flagged. Keep going.</div>
+                  </sc-if>
+                </div>
+              </div>
+            </div>
+
+            <div id="consent" style="margin-top: 40px; padding: 22px 24px; background: #f4f1ea; border-left: 2px solid #cfc8bb; max-width: 720px;">
+              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #8a837a; margin-bottom: 8px;">Study information</div>
+              <p style="margin: 0; font-size: 13.5px; color: #5a544c; line-height: 1.6;">You are taking part in a study of adaptive sequencing in programming education. Responses, timings and topic order are stored against your participant code only. Withdraw at any time by contacting the researcher with your code.</p>
+            </div>
+          </div>
+        </sc-if>
+
+      </main>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;masteryThreshold&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:0.85,&quot;min&quot;:0.6,&quot;max&quot;:0.95,&quot;step&quot;:0.01,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Model&quot;},&quot;showMasteryToLearner&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Model&quot;}}">
+const TIERS = [
+  { num: 1, name: 'Foundations', topics: ['Values and expressions','Variables and assignment','Numeric types','Strings','Booleans and comparison','Type conversion','Input and output','Comments and style'] },
+  { num: 2, name: 'Control flow', topics: ['Conditionals','Boolean logic','while loops','for loops and range','break and continue','Nested loops','Accumulator patterns','Truthiness'] },
+  { num: 3, name: 'Data structures', topics: ['Lists','Indexing and slicing','List methods','Tuples','Dictionaries','Iterating dictionaries','Sets','Nested structures','Comprehensions'] },
+  { num: 4, name: 'Functions', topics: ['Defining functions','Parameters and arguments','Return values','Scope','Default and keyword arguments','Variadic arguments','Recursion','Modules and imports'] },
+  { num: 5, name: 'Errors and I/O', topics: ['Exceptions','try, except, finally','Raising exceptions','Reading files','Writing files','Iterators and generators','Standard library tour'] },
+  { num: 6, name: 'Objects and practice', topics: ['Classes and instances','Attributes and methods','Constructors','Inheritance','Dunder methods','Testing basics','Debugging strategies'] }
+];
+
+const Q = {
+  't1-0': [
+    { prompt: 'What does this expression evaluate to?', code: '>>> 7 // 2', choices: ['3.5','3','4','1'], answer: 1, explain: 'Floor division discards the fractional part, so 7 // 2 is 3. Regular division 7 / 2 would give 3.5.' },
+    { prompt: 'Which expression evaluates to 1?', code: '', choices: ['7 % 2','7 / 2','7 // 2','7 ** 2'], answer: 0, explain: 'The modulo operator returns the remainder: 7 divided by 2 leaves 1.' }
+  ],
+  't1-1': [
+    { prompt: 'What is printed?', code: 'x = 4\ny = x\nx = 9\nprint(y)', choices: ['9','4','None','Error'], answer: 1, explain: 'y was bound to the value 4 at the time of assignment. Rebinding x afterwards does not touch y.' },
+    { prompt: 'Which of these is a valid variable name?', code: '', choices: ['2nd_place','total-score','class','_count'], answer: 3, explain: 'Names may start with a letter or underscore. Digits cannot lead, hyphens are not allowed, and class is a keyword.' }
+  ],
+  't1-2': [
+    { prompt: 'What is the type of the result?', code: '>>> 5 + 2.0', choices: ['int','float','str','decimal'], answer: 1, explain: 'Mixing an int with a float promotes the result to float.' },
+    { prompt: 'What does round(2.5) return in Python 3?', code: '', choices: ['3','2','2.5','Error'], answer: 1, explain: 'Python uses banker\u2019s rounding: halfway values round to the nearest even number, so round(2.5) is 2.' }
+  ],
+  't1-3': [
+    { prompt: 'What is printed?', code: 'name = "ada"\nprint(name.upper() + "!" * 2)', choices: ['ADA!!','ADA!','ada!!','Error'], answer: 0, explain: 'upper() returns "ADA", "!" * 2 repeats the string, and + concatenates the two.' },
+    { prompt: 'Which produces the string "cost: 12"?', code: 'n = 12', choices: ['"cost: " + n','f"cost: {n}"','"cost: %d" % "12"','"cost: ".n'], answer: 1, explain: 'An f-string interpolates the value. Concatenating a str and an int directly raises a TypeError.' }
+  ],
+  't1-4': [
+    { prompt: 'What does this evaluate to?', code: '>>> 3 < 5 == True', choices: ['True','False','Error','None'], answer: 1, explain: 'Comparisons chain pairwise: this means (3 < 5) and (5 == True). The first is True, the second is False, so the whole expression is False.' },
+    { prompt: 'Which expression is False?', code: '', choices: ['1 == 1.0','"a" < "b"','2 != 2','3 >= 3'], answer: 2, explain: '2 != 2 asks whether 2 differs from itself, which it does not.' }
+  ],
+  't1-5': [
+    { prompt: 'What is printed?', code: 'print(int("7") + int(3.9))', choices: ['10.9','10','11','Error'], answer: 1, explain: 'int("7") parses to 7 and int(3.9) truncates toward zero to 3, giving 10.' }
+  ],
+  't1-6': [
+    { prompt: 'What type does input() always return?', code: '', choices: ['int','str','float','depends on what is typed'], answer: 1, explain: 'input() always returns a string; convert it yourself if you need a number.' }
+  ],
+  't1-7': [
+    { prompt: 'Which line is a valid Python comment?', code: '', choices: ['// note','<!-- note -->','# note','/* note */'], answer: 2, explain: 'Python comments start with a hash and run to the end of the line.' }
+  ],
+  't2-0': [
+    { prompt: 'What is printed?', code: 'n = 10\nif n > 20:\n    print("big")\nelif n > 5:\n    print("medium")\nelse:\n    print("small")', choices: ['big','medium','small','nothing'], answer: 1, explain: 'The first test fails, the elif succeeds, and the else branch is skipped entirely.' },
+    { prompt: 'Which is required after an if condition?', code: '', choices: ['then','a colon','parentheses','braces'], answer: 1, explain: 'Python uses a colon and an indented block; parentheses around the condition are optional.' }
+  ],
+  't2-1': [
+    { prompt: 'What is the value?', code: '>>> True and not False', choices: ['True','False','None','Error'], answer: 0, explain: 'not False is True, and True and True is True.' },
+    { prompt: 'What does this print?', code: 'print(False or "x")', choices: ['False','x','True','Error'], answer: 1, explain: 'or returns the first truthy operand, which is the string "x".' }
+  ],
+  't2-2': [
+    { prompt: 'How many times does the body run?', code: 'i = 0\nwhile i < 3:\n    print(i)\n    i += 1', choices: ['2','3','4','forever'], answer: 1, explain: 'i takes the values 0, 1 and 2 before the condition fails.' }
+  ],
+  't2-3': [
+    { prompt: 'What is printed?', code: 'for i in range(1, 6, 2):\n    print(i, end=" ")', choices: ['1 2 3 4 5','1 3 5','1 3 5 7','2 4'], answer: 1, explain: 'range(start, stop, step) begins at 1, steps by 2 and stops before 6.' },
+    { prompt: 'How many values does range(4) produce?', code: '', choices: ['3','4','5','depends'], answer: 1, explain: 'range(4) yields 0, 1, 2, 3 \u2014 four values, stopping before 4.' }
+  ],
+  't2-4': [
+    { prompt: 'What is printed?', code: 'for c in "python":\n    if c == "h":\n        break\n    print(c, end="")', choices: ['pyt','python','pyton','p'], answer: 0, explain: 'break exits the loop entirely as soon as "h" is reached, so only p, y, t are printed.' }
+  ],
+  't2-5': [
+    { prompt: 'How many lines does this print?', code: 'for i in range(3):\n    for j in range(2):\n        print(i, j)', choices: ['5','6','3','2'], answer: 1, explain: 'The inner loop runs twice for each of the three outer iterations: 3 \u00d7 2 = 6.' }
+  ],
+  't2-6': [
+    { prompt: 'What is the final value of total?', code: 'total = 0\nfor n in [2, 4, 6]:\n    total += n', choices: ['6','12','0','[2, 4, 6]'], answer: 1, explain: 'The accumulator adds each element in turn: 2 + 4 + 6 = 12.' }
+  ],
+  't2-7': [
+    { prompt: 'Which value is truthy?', code: '', choices: ['0','""','[]','"0"'], answer: 3, explain: 'Any non-empty string is truthy, even the string "0". Zero, the empty string and the empty list are all falsy.' }
+  ],
+  't3-0': [{ prompt: 'What is printed?', code: 'xs = [1, 2, 3]\nxs.append([4, 5])\nprint(len(xs))', choices: ['5','4','3','Error'], answer: 1, explain: 'append adds one element \u2014 the nested list \u2014 so the length goes from 3 to 4. extend would have given 5.' }],
+  't3-1': [{ prompt: 'What is printed?', code: 'xs = [0, 1, 2, 3, 4]\nprint(xs[1:4])', choices: ['[1, 2, 3]','[1, 2, 3, 4]','[0, 1, 2, 3]','[2, 3]'], answer: 0, explain: 'A slice includes the start index and excludes the stop index.' }],
+  't3-2': [{ prompt: 'What does xs.pop() return?', code: 'xs = [7, 8, 9]', choices: ['7','9','None','[7, 8]'], answer: 1, explain: 'pop() with no argument removes and returns the last element.' }],
+  't3-3': [{ prompt: 'Which statement about tuples is true?', code: '', choices: ['They cannot contain strings','They are immutable','They cannot be iterated','They must be empty'], answer: 1, explain: 'Tuples cannot be modified after creation, which is what makes them usable as dictionary keys.' }],
+  't3-4': [{ prompt: 'What is printed?', code: 'd = {"a": 1}\nprint(d.get("b", 0))', choices: ['None','0','KeyError','1'], answer: 1, explain: 'get returns the default you supply when the key is absent, instead of raising KeyError.' }],
+  't3-5': [{ prompt: 'What does iterating a dict directly yield?', code: 'for x in {"a": 1, "b": 2}:', choices: ['keys','values','(key, value) pairs','nothing'], answer: 0, explain: 'Iterating a dict yields its keys. Use .items() for pairs and .values() for values.' }],
+  't3-6': [{ prompt: 'What is len({1, 2, 2, 3})?', code: '', choices: ['4','3','2','Error'], answer: 1, explain: 'Sets discard duplicates, so only 1, 2 and 3 remain.' }],
+  't3-7': [{ prompt: 'What is printed?', code: 'data = {"u": [1, 2]}\nprint(data["u"][1])', choices: ['1','2','[1, 2]','KeyError'], answer: 1, explain: 'Index into the dict first, then into the list it holds.' }],
+  't3-8': [{ prompt: 'What does this produce?', code: '[n * n for n in range(4)]', choices: ['[1, 4, 9]','[0, 1, 4, 9]','[0, 1, 2, 3]','[0, 2, 4, 6]'], answer: 1, explain: 'The comprehension squares each of 0, 1, 2, 3.' }],
+  't4-0': [{ prompt: 'Which keyword defines a function?', code: '', choices: ['func','def','function','lambda'], answer: 1, explain: 'def introduces a named function; lambda makes a small anonymous one.' }],
+  't4-1': [{ prompt: 'What is printed?', code: 'def greet(a, b):\n    print(a, b)\n\ngreet(b="world", a="hello")', choices: ['hello world','world hello','Error','None None'], answer: 0, explain: 'Keyword arguments bind by name, so order at the call site does not matter.' }],
+  't4-2': [{ prompt: 'What does a function return with no return statement?', code: '', choices: ['0','None','""','Error'], answer: 1, explain: 'Falling off the end of a function returns None implicitly.' }],
+  't4-3': [{ prompt: 'What is printed?', code: 'x = 1\ndef f():\n    x = 2\nf()\nprint(x)', choices: ['1','2','None','Error'], answer: 0, explain: 'Assignment inside a function creates a local name; the global x is untouched without a global declaration.' }],
+  't4-4': [{ prompt: 'What is printed?', code: 'def f(a, b=3):\n    return a * b\nprint(f(2))', choices: ['2','5','6','Error'], answer: 2, explain: 'b falls back to its default of 3, so the result is 2 * 3.' }],
+  't4-5': [{ prompt: 'Inside a function, what type is args in def f(*args)?', code: '', choices: ['list','tuple','dict','set'], answer: 1, explain: '*args collects extra positional arguments into a tuple; **kwargs collects keywords into a dict.' }],
+  't4-6': [{ prompt: 'What is missing from a correct recursive function?', code: 'def fact(n):\n    return n * fact(n - 1)', choices: ['a return value','a base case','a loop','a parameter'], answer: 1, explain: 'Without a base case the recursion never stops and Python raises RecursionError.' }],
+  't4-7': [{ prompt: 'Which import makes sqrt available as a bare name?', code: '', choices: ['import math','from math import sqrt','import sqrt','include math'], answer: 1, explain: 'from-import binds the name directly; plain import math requires math.sqrt.' }],
+  't5-0': [{ prompt: 'What error does this raise?', code: 'int("hello")', choices: ['TypeError','ValueError','NameError','SyntaxError'], answer: 1, explain: 'The type is right but the value cannot be parsed, so Python raises ValueError.' }],
+  't5-1': [{ prompt: 'When does a finally block run?', code: '', choices: ['Only on success','Only on error','Always','Never if except ran'], answer: 2, explain: 'finally runs whether or not an exception was raised, which makes it the right place for cleanup.' }],
+  't5-2': [{ prompt: 'Which statement signals an error deliberately?', code: '', choices: ['throw','raise','error','panic'], answer: 1, explain: 'raise ValueError("...") is how Python code reports its own errors.' }],
+  't5-3': [{ prompt: 'What does f.read() return for a text file?', code: '', choices: ['a list of lines','the whole file as one string','the first line','bytes'], answer: 1, explain: 'read() returns the entire contents as a single string; readlines() gives a list.' }],
+  't5-4': [{ prompt: 'Which mode truncates an existing file?', code: '', choices: ['"r"','"a"','"w"','"x"'], answer: 2, explain: 'Opening with "w" empties the file first; "a" appends instead.' }],
+  't5-5': [{ prompt: 'What keyword turns a function into a generator?', code: '', choices: ['return','yield','async','gen'], answer: 1, explain: 'yield suspends the function and hands a value to the caller, resuming where it left off.' }],
+  't5-6': [{ prompt: 'Which module handles dates and times?', code: '', choices: ['calendar only','datetime','timeit','clock'], answer: 1, explain: 'datetime provides date, time and datetime objects in the standard library.' }],
+  't6-0': [{ prompt: 'What does this create?', code: 'class Dog:\n    pass\n\nd = Dog()', choices: ['a class','an instance','a module','a function'], answer: 1, explain: 'Calling the class produces an instance; Dog itself is the class.' }],
+  't6-1': [{ prompt: 'What is the first parameter of an instance method conventionally called?', code: '', choices: ['this','self','cls','obj'], answer: 1, explain: 'By convention it is self, and Python passes the instance to it automatically.' }],
+  't6-2': [{ prompt: 'When does __init__ run?', code: '', choices: ['When the class is defined','When an instance is created','When the object is deleted','Only if called manually'], answer: 1, explain: '__init__ initialises a newly created instance at construction time.' }],
+  't6-3': [{ prompt: 'What does class B(A) mean?', code: '', choices: ['B contains A','B inherits from A','A inherits from B','B copies A'], answer: 1, explain: 'B is a subclass of A and inherits its attributes and methods.' }],
+  't6-4': [{ prompt: 'Which method controls what print(obj) shows?', code: '', choices: ['__init__','__str__','__len__','__call__'], answer: 1, explain: '__str__ produces the human-readable string used by print.' }],
+  't6-5': [{ prompt: 'What does a unit test assert?', code: '', choices: ['That code runs fast','That an expected value matches the actual value','That syntax is valid','That types are declared'], answer: 1, explain: 'A test compares what the code actually produced with what it should have produced.' }],
+  't6-6': [{ prompt: 'What is usually the fastest first debugging step?', code: '', choices: ['Rewrite the function','Print or inspect the values involved','Restart the machine','Delete the code'], answer: 1, explain: 'Looking at real intermediate values tells you where reality diverged from your model of the code.' }]
+};
+
+const PLACEMENT = [
+  { tier: 1, prompt: 'What is printed?', code: 'print(2 + 3 * 4)', choices: ['20','14','24','9'], answer: 1 },
+  { tier: 2, prompt: 'How many numbers does this print?', code: 'for i in range(2, 7):\n    print(i)', choices: ['4','5','6','7'], answer: 1 },
+  { tier: 3, prompt: 'What is printed?', code: 'd = {"a": 1, "b": 2}\nprint(len(d) + d["b"])', choices: ['2','3','4','KeyError'], answer: 2 },
+  { tier: 4, prompt: 'What does f(3) return?', code: 'def f(n):\n    if n <= 1:\n        return 1\n    return n * f(n - 1)', choices: ['3','6','9','None'], answer: 1 },
+  { tier: 5, prompt: 'What is printed?', code: 'try:\n    1 / 0\nexcept ZeroDivisionError:\n    print("caught")\nfinally:\n    print("done")', choices: ['caught','done','caught then done','nothing'], answer: 2 },
+  { tier: 6, prompt: 'What is printed?', code: 'class P:\n    def __init__(self, n):\n        self.n = n\n\nprint(P(5).n)', choices: ['5','P','None','Error'], answer: 0 }
+];
+
+const P_SLIP = 0.1, P_GUESS = 0.2, P_TRANSIT = 0.14;
+const KEYS = ['A', 'B', 'C', 'D'];
+
+function fmt(p) { return p.toFixed(2); }
+
+const CHOICE_BASE = { display: 'flex', gap: '12px', alignItems: 'flex-start', width: '100%', textAlign: 'left', padding: '14px 16px', background: '#fffdf9', border: '1px solid #ded7cb', fontFamily: "'IBM Plex Sans', sans-serif", fontSize: '15px', color: '#1b1a17', cursor: 'pointer', lineHeight: 1.45, transition: 'border-color 0.15s ease' };
+const NAV_BASE = { display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '8px', width: '100%', padding: '9px 24px', background: 'none', border: 'none', borderLeft: '2px solid transparent', fontFamily: "'IBM Plex Sans', sans-serif", fontSize: '15px', color: '#6f6960', cursor: 'pointer', textAlign: 'left' };
+const NAV_ON = { ...NAV_BASE, color: '#1b1a17', borderLeft: '2px solid #2f5d50', background: '#f7f4ee', fontWeight: 500 };
+
+function bar(w, color) { return { width: (w * 100) + '%', height: '100%', background: color }; }
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    const topics = [];
+    TIERS.forEach((t, ti) => t.topics.forEach((name, i) => topics.push({
+      id: 't' + (ti + 1) + '-' + i, name: name, tier: t.num, tierName: t.name,
+      p: 0.15, items: 0, correct: 0, qi: 0
+    })));
+    this.state = {
+      stage: 'enroll', tab: 'session', code: 'P001',
+      pName: '', pEmail: '', pCourse: '', pSaved: false,
+      topics: topics, placeAnswers: {}, placeSubmitted: false, placeCorrect: [],
+      selected: null, revealed: false, beforeP: 0.15, afterP: 0.15,
+      cleared: null, history: [], items: 0, correctCount: 0,
+      started: null, now: Date.now(), detail: null
+    };
+  }
+
+  memo(key, sig, fn) {
+    if (!this._m) this._m = {};
+    const e = this._m[key];
+    if (e && e.sig === sig) return e.val;
+    const val = fn();
+    this._m[key] = { sig: sig, val: val };
+    return val;
+  }
+
+  handler(key, fn) {
+    if (!this._h) this._h = {};
+    if (!this._h[key]) this._h[key] = fn;
+    return this._h[key];
+  }
+
+  elapsedText() {
+    const secs = Math.floor((Date.now() - (this.state.started || Date.now())) / 1000);
+    return Math.floor(secs / 60) + 'm ' + String(secs % 60).padStart(2, '0') + 's';
+  }
+
+  threshold() { return this.props.masteryThreshold ?? 0.85; }
+
+  currentTopic(topics) {
+    const th = this.threshold();
+    return (topics || this.state.topics).find(t => t.p < th) || null;
+  }
+
+  nextAfter(topics, id) {
+    const th = this.threshold();
+    return topics.filter(t => t.id !== id).find(t => t.p < th) || null;
+  }
+
+  bank(topic) {
+    return Q[topic.id] || [{ prompt: 'Which statement best describes ' + topic.name.toLowerCase() + '?', code: '', choices: ['It is a Python built-in type','It is a way of organising code or data','It is a third-party library','It is deprecated'], answer: 1, explain: 'This topic is part of how Python programs are organised rather than a library feature.' }];
+  }
+
+  currentQ() {
+    const t = this.currentTopic();
+    if (!t) return null;
+    const b = this.bank(t);
+    return b[t.qi % b.length];
+  }
+
+  answer(i) {
+    if (this.state.revealed) return;
+    const t = this.currentTopic();
+    const q = this.currentQ();
+    const correct = i === q.answer;
+    const prior = t.p;
+    const cond = correct
+      ? (prior * (1 - P_SLIP)) / (prior * (1 - P_SLIP) + (1 - prior) * P_GUESS)
+      : (prior * P_SLIP) / (prior * P_SLIP + (1 - prior) * (1 - P_GUESS));
+    const post = Math.min(0.995, cond + (1 - cond) * P_TRANSIT);
+    const topics = this.state.topics.map(x => x.id === t.id
+      ? { ...x, p: post, items: x.items + 1, correct: x.correct + (correct ? 1 : 0) } : x);
+    const attempted = topics.filter(x => x.items > 0);
+    const mean = attempted.reduce((s, x) => s + x.p, 0) / Math.max(1, attempted.length);
+    this.setState({
+      selected: i, revealed: true, beforeP: prior, afterP: post, topics: topics,
+      items: this.state.items + 1, correctCount: this.state.correctCount + (correct ? 1 : 0),
+      history: this.state.history.concat([{ mean: mean, correct: correct, topic: t.name }]),
+      started: this.state.started || Date.now()
+    });
+  }
+
+  continueItem() {
+    const th = this.threshold();
+    const t = this.currentTopic();
+    if (t && t.p >= th) return;
+    const topics = this.state.topics.map(x => x.id === t.id ? { ...x, qi: x.qi + 1 } : x);
+    const cur = topics.find(x => x.id === t.id);
+    if (cur.p >= th) {
+      this.setState({ topics: topics, cleared: { name: t.name, value: fmt(cur.p), items: cur.items }, selected: null, revealed: false });
+    } else {
+      this.setState({ topics: topics, selected: null, revealed: false });
+    }
+  }
+
+  renderVals() {
+    const s = this.state, th = this.threshold();
+    const showMastery = this.props.showMasteryToLearner ?? true;
+    const v = {
+      code: s.code,
+      isEnroll: s.stage === 'enroll', isPlacement: s.stage === 'placement', isApp: s.stage === 'app',
+      onCode: this.handler('code', e => this.setState({ code: e.target.value.toUpperCase() })),
+      onEnrol: this.handler('enrol', () => this.setState({ stage: 'placement', started: Date.now() })),
+      onEnterApp: this.handler('enterApp', () => this.setState({ stage: 'app' }))
+    };
+    const sig = s.topics.map(t => t.p.toFixed(4) + ':' + t.items).join('|') + '#' + th;
+
+    // placement paper
+    const ans = s.placeAnswers || {};
+    const answeredN = Object.keys(ans).length;
+    const choiceBase = CHOICE_BASE;
+    v.placeActive = s.stage === 'placement' && !s.placeSubmitted;
+    v.placeDone = s.stage === 'placement' && s.placeSubmitted;
+    v.placeCounter = answeredN + ' of ' + PLACEMENT.length;
+    v.placeAnsweredLine = answeredN === PLACEMENT.length
+      ? 'All six answered. Submit when you are ready.'
+      : answeredN + ' of ' + PLACEMENT.length + ' answered \u00b7 blanks are fine';
+    v.paper = this.memo('paper', JSON.stringify(ans), () => PLACEMENT.map((pq, qi) => ({
+      num: String(qi + 1).padStart(2, '0'),
+      prompt: pq.prompt,
+      code: pq.code,
+      tierLabel: 'Tier ' + pq.tier,
+      choices: pq.choices.map((c, i) => {
+        const on = ans[qi] === i;
+        return {
+          key: KEYS[i], label: c,
+          keyStyle: {
+            fontFamily: "'IBM Plex Mono', monospace", fontSize: '11.5px', minWidth: '20px', height: '20px',
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+            border: on ? '1px solid #2f5d50' : '1px solid #cfc8bb',
+            background: on ? '#2f5d50' : 'transparent', color: on ? '#f7f4ee' : '#8a837a'
+          },
+          style: {
+            ...choiceBase, alignItems: 'center', padding: '11px 14px', fontSize: '14.5px',
+            background: on ? '#eef3f0' : '#fffdf9',
+            border: on ? '1px solid #2f5d50' : '1px solid #ded7cb'
+          },
+          onClick: () => this.setState({ placeAnswers: { ...ans, [qi]: i } })
+        };
+      })
+    })));
+    v.onPlaceClear = this.handler('placeClear', () => this.setState({ placeAnswers: {} }));
+    v.onPlaceSubmit = this.handler('placeSubmit', () => {
+      const a = this.state.placeAnswers || {};
+      const arr = PLACEMENT.map((pq, qi) => a[qi] === pq.answer);
+      const highest = arr.reduce((h, ok, i) => ok ? i + 1 : h, 0);
+      const topics = this.state.topics.map(t => {
+        let p;
+        if (arr[t.tier - 1]) p = 0.6; else if (t.tier < highest) p = 0.55; else if (t.tier === highest + 1) p = 0.25; else p = 0.15;
+        return { ...t, p: p };
+      });
+      this.setState({ placeCorrect: arr, placeSubmitted: true, topics: topics });
+    });
+    v.placeSummary = this.memo('placeSummary', sig, () => TIERS.map(t => {
+      const ts = s.topics.filter(x => x.tier === t.num);
+      const m = ts.reduce((a, x) => a + x.p, 0) / ts.length;
+      return { tier: 'T' + t.num, name: t.name, value: fmt(m), barStyle: bar(m, '#2f5d50') };
+    }));
+
+    // shell
+    const mastered = s.topics.filter(t => t.p >= th).length;
+    v.masteredCount = mastered;
+    v.overallBarStyle = this.memo('overall', String(mastered), () => ({ width: (mastered / 47 * 100) + '%', height: '100%', background: '#2f5d50', transition: 'width 0.4s ease' }));
+    const cur = this.currentTopic();
+    v.navItems = this.memo('nav', s.tab + '|' + mastered + '|' + s.items + '|' + (cur ? cur.tier : 0), () => [
+      { key: 'session', label: 'Session', meta: cur ? 'tier ' + cur.tier : 'done' },
+      { key: 'map', label: 'Curriculum', meta: mastered + '/47' },
+      { key: 'profile', label: 'Profile', meta: s.items + ' items' }
+    ].map(n => ({ ...n, style: s.tab === n.key ? NAV_ON : NAV_BASE, onClick: this.handler('tab-' + n.key, () => this.setState({ tab: n.key })) })));
+    v.tabSession = s.tab === 'session'; v.tabMap = s.tab === 'map'; v.tabProfile = s.tab === 'profile';
+
+    v.elapsed = this.elapsedText();
+    v.itemsAnswered = s.items;
+
+    // session
+    const topic = cur || s.topics[s.topics.length - 1];
+    v.topic = topic;
+    v.topicP = showMastery ? fmt(topic.p) : '\u2014';
+    v.topicBarStyle = this.memo('topicBar', topic.id + topic.p.toFixed(4), () => ({ width: (topic.p * 100) + '%', height: '100%', background: topic.p >= th ? '#2f5d50' : '#9db8ad', transition: 'width 0.5s ease' }));
+    v.deltaLabel = s.revealed ? (s.afterP >= s.beforeP ? '+' : '') + (s.afterP - s.beforeP).toFixed(2) + ' this item' : 'updates after each answer';
+    v.showCleared = !!s.cleared;
+    v.showQuestion = !s.cleared;
+    v.clearedName = s.cleared ? s.cleared.name : '';
+    v.clearedValue = s.cleared ? s.cleared.value : '';
+    v.clearedItems = s.cleared ? s.cleared.items : '';
+    const nxt = this.nextAfter(s.topics, s.cleared ? topic.id : null);
+    v.nextTopicName = nxt ? nxt.name : 'curriculum complete';
+    v.onNextTopic = this.handler('nextTopic', () => this.setState({ cleared: null, selected: null, revealed: false }));
+
+    const q = this.currentQ() || { prompt: '', code: '', choices: [], answer: 0, explain: '' };
+    v.q = q;
+    v.qKindLabel = q.code ? 'Predict the output' : 'Concept check';
+    v.prereqLine = topic.tier === 1 ? 'None \u2014 this is a foundation topic.' : 'Tier ' + (topic.tier - 1) + ' \u00b7 ' + TIERS[topic.tier - 2].name;
+    v.choices = this.memo('choices', topic.id + '|' + topic.qi + '|' + s.revealed + '|' + s.selected, () => q.choices.map((c, i) => {
+      let st = { ...choiceBase };
+      if (s.revealed) {
+        st.cursor = 'default';
+        if (i === q.answer) { st.borderColor = '#2f5d50'; st.background = '#eef3f0'; }
+        else if (i === s.selected) { st.borderColor = '#b4655a'; st.background = '#f8efed'; }
+        else { st.color = '#8a837a'; }
+      }
+      return {
+        key: KEYS[i], label: c, style: st,
+        mark: s.revealed ? (i === q.answer ? 'correct' : (i === s.selected ? 'your answer' : '')) : '',
+        onClick: this.handler('ans-' + i, () => this.answer(i))
+      };
+    }));
+    v.revealed = s.revealed;
+    v.verdictLabel = s.selected === q.answer ? 'Correct' : 'Not quite';
+    v.verdictStyle = this.memo('verdict', String(s.selected === q.answer), () => ({ fontFamily: 'Spectral, Georgia, serif', fontSize: '19px', color: s.selected === q.answer ? '#2f5d50' : '#b4655a' }));
+    v.beforeP = fmt(s.beforeP); v.afterP = fmt(s.afterP);
+    v.onContinue = this.handler('continue', () => this.continueItem());
+
+    // curriculum
+    v.tiers = this.memo('tiers', sig + '|' + topic.id + '|' + showMastery, () => TIERS.map(t => {
+      const ts = s.topics.filter(x => x.tier === t.num);
+      const done = ts.filter(x => x.p >= th).length;
+      return {
+        num: t.num, name: t.name, stat: done + ' of ' + ts.length + ' mastered',
+        topics: ts.map(x => ({
+          name: x.name, value: showMastery ? fmt(x.p) : '',
+          style: {
+            display: 'block', width: '100%', padding: '13px 14px 12px', textAlign: 'left', cursor: 'pointer',
+            background: x.id === topic.id ? '#eef3f0' : '#fffdf9',
+            border: x.id === topic.id ? '1px solid #2f5d50' : '1px solid #e2dcd1',
+            fontFamily: "'IBM Plex Sans', sans-serif", color: '#1b1a17', transition: 'border-color 0.15s ease'
+          },
+          barStyle: bar(x.p, x.p >= th ? '#2f5d50' : (x.items > 0 ? '#9db8ad' : '#cfc8bb')),
+          onClick: this.handler('goSession', () => this.setState({ tab: 'session' }))
+        }))
+      };
+    }));
+
+    // profile identity
+    v.pName = s.pName; v.pEmail = s.pEmail; v.pCourse = s.pCourse;
+    v.monogram = (s.pName || '').trim() ? s.pName.trim().split(/\s+/).slice(0, 2).map(w => w[0].toUpperCase()).join('') : s.code.slice(0, 2);
+    v.profileTitle = (s.pName || '').trim() ? s.pName.trim().split(/\s+/)[0] + '\u2019s progress' : 'Your progress';
+    v.courseSuffix = (s.pCourse || '').trim() ? ' \u00b7 ' + s.pCourse.trim() : '';
+    v.onName = this.handler('pName', e => this.setState({ pName: e.target.value, pSaved: false }));
+    v.onEmail = this.handler('pEmail', e => this.setState({ pEmail: e.target.value, pSaved: false }));
+    v.onCourse = this.handler('pCourse', e => this.setState({ pCourse: e.target.value, pSaved: false }));
+    v.onSaveProfile = this.handler('pSave', () => this.setState({ pSaved: true }));
+    v.sidebarName = (s.pName || '').trim() || 'Details not added';
+    v.savedLabel = s.pSaved ? 'Details saved' : '';
+    v.savedStyle = this.memo('savedStyle', String(s.pSaved), () => ({ fontSize: '13.5px', color: '#2f5d50' }));
+
+    // profile
+    const attempted = s.topics.filter(t => t.items > 0);
+    const meanAll = attempted.length ? attempted.reduce((a, x) => a + x.p, 0) / attempted.length : 0;
+    v.stats = this.memo('stats', sig + '|' + s.items + '|' + v.elapsed, () => [
+      { label: 'Topics mastered', value: String(mastered), note: 'of 47 in the curriculum' },
+      { label: 'Items answered', value: String(s.items), note: s.items ? Math.round(s.correctCount / s.items * 100) + '% correct' : 'this session' },
+      { label: 'Mean mastery', value: attempted.length ? fmt(meanAll) : '\u2014', note: 'across topics attempted' },
+      { label: 'Time on task', value: v.elapsed, note: 'single sitting' }
+    ]);
+    const h = s.history;
+    v.hasCurve = h.length > 1; v.noCurve = h.length <= 1;
+    const px = i => 46 + (h.length > 1 ? (i / (h.length - 1)) * 700 : 0);
+    const py = m => 180 - m * 160;
+    v.curvePoints = h.map((d, i) => px(i).toFixed(1) + ',' + py(d.mean).toFixed(1)).join(' ');
+    v.curveArea = h.length > 1 ? '46,180 ' + h.map((d, i) => px(i).toFixed(1) + ',' + py(d.mean).toFixed(1)).join(' ') + ' 746,180' : '';
+    v.curveDots = this.memo('dots', String(h.length), () => h.map((d, i) => ({ x: px(i).toFixed(1), y: py(d.mean).toFixed(1), fill: d.correct ? '#2f5d50' : '#b4655a' })));
+    v.curveEndLabel = 'item ' + h.length;
+    v.attempted = this.memo('attempted', sig, () => attempted.slice().sort((a, b) => b.p - a.p).map(t => ({
+      name: t.name, items: t.items, correct: t.correct, value: fmt(t.p),
+      barStyle: bar(t.p, t.p >= th ? '#2f5d50' : '#9db8ad')
+    })));
+    v.noneAttempted = attempted.length === 0;
+    v.tierStats = this.memo('tierStats', sig, () => TIERS.map(t => {
+      const ts = s.topics.filter(x => x.tier === t.num);
+      const m = ts.reduce((a, x) => a + x.p, 0) / ts.length;
+      const done = ts.filter(x => x.p >= th).length;
+      return { name: t.name, label: done + '/' + ts.length, barStyle: bar(m, done === ts.length ? '#2f5d50' : '#9db8ad') };
+    }));
+    const rev = attempted.filter(t => t.p < 0.5 && t.items >= 1).sort((a, b) => a.p - b.p).slice(0, 5);
+    v.review = this.memo('review', sig, () => rev.map(t => ({ name: t.name, value: fmt(t.p) })));
+    v.noReview = rev.length === 0;
+
+    return v;
+  }
+}
+</script>
+</body>
+</html>

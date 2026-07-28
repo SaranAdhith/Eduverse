@@ -1,9 +1,9 @@
 import type { Config } from "tailwindcss";
 
-// Eduverse design system: indigo→violet brand, teal mastery accent, deep-space
-// dark mode. Colors resolve from the CSS variables in globals.css.
+// Eduverse design system: warm paper ground, deep green accent, Spectral serif
+// headings over IBM Plex Sans/Mono. Flat and square — see globals.css, which
+// holds every colour as an HSL triplet so `/opacity` modifiers keep working.
 const config: Config = {
-  darkMode: ["class"],
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
     container: {
@@ -14,13 +14,19 @@ const config: Config = {
     extend: {
       colors: {
         border: "hsl(var(--border))",
+        "border-strong": "hsl(var(--border-strong))",
+        "border-soft": "hsl(var(--border-soft))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        track: "hsl(var(--track))",
+        faint: "hsl(var(--faint))",
+        fainter: "hsl(var(--fainter))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          hover: "hsl(var(--primary-hover))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -33,10 +39,13 @@ const config: Config = {
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
+          border: "hsl(var(--accent-border))",
+          mid: "hsl(var(--accent-mid))",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
+          tint: "hsl(var(--destructive-tint))",
         },
         success: {
           DEFAULT: "hsl(var(--success))",
@@ -54,50 +63,34 @@ const config: Config = {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
         },
-        brand: {
-          DEFAULT: "hsl(var(--brand))",
-          2: "hsl(var(--brand-2))",
-          3: "hsl(var(--brand-3))",
-        },
       },
+      // Square by design; the scale stays so shadcn primitives still compile.
       borderRadius: {
-        xl: "calc(var(--radius) + 4px)",
+        xl: "var(--radius)",
         lg: "var(--radius)",
-        md: "calc(var(--radius) - 4px)",
-        sm: "calc(var(--radius) - 8px)",
+        md: "var(--radius)",
+        sm: "var(--radius)",
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
-        display: ["var(--font-display)", "var(--font-inter)", "system-ui", "sans-serif"],
+        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        display: ["var(--font-display)", "Georgia", "serif"],
         mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
-      boxShadow: {
-        soft: "0 1px 2px 0 hsl(245 40% 20% / 0.04), 0 4px 16px -4px hsl(245 40% 20% / 0.08)",
-        card: "0 1px 3px 0 hsl(245 40% 20% / 0.05), 0 10px 30px -12px hsl(245 40% 20% / 0.12)",
-        glow: "0 8px 30px -6px hsl(var(--brand) / 0.45)",
+      fontSize: {
+        "2xs": ["0.6875rem", { lineHeight: "1rem" }],
       },
-      backgroundImage: {
-        "brand-gradient":
-          "linear-gradient(100deg, hsl(var(--brand)), hsl(var(--brand-2)) 60%, hsl(var(--brand-3)))",
+      boxShadow: {
+        sheet:
+          "0 1px 0 hsl(var(--border-soft)), 0 18px 40px -34px hsl(var(--foreground) / 0.4)",
       },
       keyframes: {
-        "fade-in": {
-          from: { opacity: "0", transform: "translateY(4px)" },
-          to: { opacity: "1", transform: "translateY(0)" },
-        },
-        "fade-in-up": {
-          from: { opacity: "0", transform: "translateY(12px)" },
-          to: { opacity: "1", transform: "translateY(0)" },
-        },
-        float: {
-          "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-6px)" },
+        "paper-in": {
+          from: { opacity: "0", transform: "translateY(6px)" },
+          to: { opacity: "1", transform: "none" },
         },
       },
       animation: {
-        "fade-in": "fade-in 0.25s ease-out",
-        "fade-in-up": "fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both",
-        float: "float 6s ease-in-out infinite",
+        "paper-in": "paper-in 0.25s ease both",
       },
     },
   },

@@ -3,25 +3,23 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, RotateCcw } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { AppShell } from "@/components/AppShell";
 import { McqQuiz } from "@/components/McqQuiz";
 import type { ChoiceLabel } from "@/components/McqItem";
 import {
   useAdvancePath,
   useCurrentPath,
+  useMastery,
   useStartGate,
   useSubmitGate,
 } from "@/lib/queries";
 import { useRequireCode } from "@/lib/useRequireCode";
-import { masteryBucket } from "@/lib/utils";
+import { meanAttemptedMastery, useJournal } from "@/lib/store";
+import { masteryBucket, MASTERY_THRESHOLD } from "@/lib/utils";
 import type { GateAnswerIn, GateResult, GateStart } from "@/lib/types";
-
-const BLOCK = process.env.NEXT_PUBLIC_DEFAULT_BLOCK ?? "A";
 
 export default function GatePage({
   params,
@@ -34,7 +32,10 @@ export default function GatePage({
   const startGate = useStartGate();
   const submitGate = useSubmitGate();
   const advance = useAdvancePath();
-  const path = useCurrentPath(BLOCK);
+  const path = useCurrentPath();
+  const mastery = useMastery(ready);
+  const recordItem = useJournal((s) => s.recordItem);
+  const recordCheckpoint = useJournal((s) => s.recordCheckpoint);
 
   const [gate, setGate] = useState<GateStart | null>(null);
   const [index, setIndex] = useState(0);
@@ -81,6 +82,20 @@ export default function GatePage({
     }
     const res = await submitGate.mutateAsync({ stepId, answers: next });
     setResult(res);
+    // The gate reports how many of the five landed, and a fresh posterior —
+    // both are real server values, so both go in the journal.
+    const correct = Math.round(res.score * gate.items.length);
+    for (let i = 0; i < gate.items.length; i += 1) {
+      recordItem({ correct: i < correct, topicId: gate.topic_id });
+    }
+    const entries = (await mastery.refetch()).data?.entries;
+    recordCheckpoint({
+      mean: entries
+        ? meanAttemptedMastery(entries)
+        : res.posterior_at_gate,
+      correct: res.passed,
+      topicId: gate.topic_id,
+    });
   };
 
   const onContinue = async () => {
@@ -96,111 +111,120 @@ export default function GatePage({
 
   if (failed) {
     return (
-      <main className="container max-w-2xl space-y-4 py-16 text-center">
-        <p className="text-muted-foreground">
-          This gate isn&apos;t available right now.
-        </p>
-        <Button asChild variant="outline">
-          <Link href="/dashboard">Back to dashboard</Link>
-        </Button>
-      </main>
+      <AppShell>
+        <div className="max-w-[720px] space-y-5 px-8 py-10 lg:px-14">
+          <h1 className="font-display text-[28px]">
+            This check isn&apos;t available right now.
+          </h1>
+          <Button asChild variant="secondary">
+            <Link href="/dashboard">Back to session</Link>
+          </Button>
+        </div>
+      </AppShell>
     );
   }
 
   if (!ready || startGate.isPending || !gate) {
     return (
-      <main className="container max-w-2xl space-y-6 py-16">
-        <Skeleton className="h-4 w-40" />
-        <Skeleton className="h-8 w-full" />
-        <Skeleton className="h-16 w-full" />
-      </main>
+      <AppShell>
+        <div className="max-w-[720px] space-y-6 px-8 py-10 lg:px-14">
+          <Skeleton className="h-4 w-40" />
+          <Skeleton className="h-9 w-80" />
+          <Skeleton className="h-14 w-full" />
+          <Skeleton className="h-14 w-full" />
+        </div>
+      </AppShell>
     );
   }
 
   if (result) {
+    // DOC_07 §4: the raw posterior is bucketed here so the 0.85 threshold
+    // can't be reverse-engineered from a gate result.
     const bucket = masteryBucket(result.posterior_at_gate);
+    const correct = Math.round(result.score * gate.items.length);
     return (
-      <main className="bg-aurora flex min-h-screen items-center justify-center px-6 py-16">
-        <Card className="animate-fade-in-up w-full max-w-lg">
-          <CardHeader className="items-center text-center">
-            {result.passed ? (
-              <span className="mb-1 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-gradient text-white shadow-glow">
-                <CheckCircle2 className="h-8 w-8" aria-hidden />
-              </span>
-            ) : (
-              <span className="mb-1 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-muted text-muted-foreground">
-                <RotateCcw className="h-8 w-8" aria-hidden />
-              </span>
-            )}
-            <CardTitle className="text-2xl">
-              {result.passed ? "Passed!" : "Not yet — let's review"}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6 text-center">
-            <div className="flex flex-col items-center gap-2">
-              <span className="text-sm text-muted-foreground">
+      <AppShell>
+        <div className="max-w-[720px] px-8 pb-24 pt-10 lg:px-14">
+          <div
+            className={`animate-paper-in border px-8 py-8 ${
+              result.passed
+                ? "border-primary bg-accent"
+                : "border-border bg-card"
+            }`}
+          >
+            <div
+              className={`kicker mb-2.5 ${
+                result.passed ? "text-primary" : "text-muted-foreground"
+              }`}
+            >
+              {result.passed ? "Threshold cleared" : "Not yet"}
+            </div>
+            <h1 className="mb-2.5 font-display text-[28px]">
+              {result.passed
+                ? "You can move on."
+                : "One more pass at this one."}
+            </h1>
+            <p className="mb-6 max-w-[520px] text-[15px] text-secondary-foreground">
+              {result.passed
+                ? `You answered ${correct} of ${gate.items.length}, and the estimate cleared the ${MASTERY_THRESHOLD.toFixed(2)} threshold. This topic will resurface later for a short check.`
+                : `You answered ${correct} of ${gate.items.length}. The estimate moved, but not far enough yet — that is the normal way through, not a setback. Nothing is lost by going again.`}
+            </p>
+
+            <div className="mb-7 flex items-baseline gap-3 border-t border-border-soft pt-4">
+              <span className="text-[13px] text-muted-foreground">
                 Your mastery of this topic
               </span>
-              <Badge variant={result.passed ? "success" : "muted"}>
-                {bucket}
-              </Badge>
+              <span className="font-mono text-[15px]">{bucket}</span>
             </div>
+
             {result.passed ? (
-              <Button
-                size="lg"
-                variant="brand"
-                onClick={onContinue}
-                disabled={advance.isPending}
-              >
+              <Button onClick={onContinue} disabled={advance.isPending}>
                 Continue to next topic
-                <ArrowRight className="h-4 w-4" />
               </Button>
             ) : (
-              <div className="space-y-3">
-                <p className="text-sm leading-relaxed text-muted-foreground">
-                  You&apos;re close. A quick review of the lesson will get you
-                  over the line — there&apos;s no penalty for trying again.
-                </p>
-                <Button asChild size="lg" variant="outline">
+              <div className="flex flex-wrap items-center gap-4">
+                <Button asChild>
                   <Link href={`/learn/${stepId}`}>Back to the lesson</Link>
                 </Button>
+                <span className="text-[13.5px] text-muted-foreground">
+                  There is no penalty for trying again.
+                </span>
               </div>
             )}
-          </CardContent>
-        </Card>
-      </main>
+          </div>
+        </div>
+      </AppShell>
     );
   }
 
   const item = gate.items[index];
   return (
-    <main className="bg-aurora min-h-screen py-10">
-      <div className="mx-auto mb-8 flex max-w-2xl items-center gap-3 px-6 sm:px-0">
-        <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-accent text-accent-foreground">
-          <CheckCircle2 className="h-5 w-5" />
-        </span>
-        <div>
-          <h1 className="font-display text-xl font-semibold">
-            Gate quiz · {gate.topic_id}
+    <AppShell>
+      <div className="max-w-[720px] px-8 pb-24 pt-10 lg:px-14">
+        <header className="mb-9">
+          <div className="kicker mb-2">Mastery check</div>
+          <h1 className="font-display text-[32px]">
+            {gate.items.length} questions on this topic
           </h1>
-          <p className="text-sm text-muted-foreground">
-            Pass to continue to the next topic.
+          <p className="mt-2 text-[13.5px] text-muted-foreground">
+            Answers are reviewed together at the end — nothing is revealed as
+            you go.
           </p>
-        </div>
+        </header>
+        <McqQuiz
+          name={`gate-${item.id}`}
+          progressLabel={`Question ${index + 1} of ${gate.items.length}`}
+          progressValue={(index / gate.items.length) * 100}
+          item={item}
+          selected={selected}
+          onSelect={setSelected}
+          onSubmit={onSubmit}
+          submitLabel={
+            index + 1 < gate.items.length ? "Next question" : "Submit answers"
+          }
+          submitting={submitGate.isPending}
+        />
       </div>
-      <McqQuiz
-        name={`gate-${item.id}`}
-        progressLabel={`Question ${index + 1} of ${gate.items.length}`}
-        progressValue={(index / gate.items.length) * 100}
-        item={item}
-        selected={selected}
-        onSelect={setSelected}
-        onSubmit={onSubmit}
-        submitLabel={
-          index + 1 < gate.items.length ? "Next question" : "Submit quiz"
-        }
-        submitting={submitGate.isPending}
-      />
-    </main>
+    </AppShell>
   );
 }

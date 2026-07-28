@@ -2,35 +2,22 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
-import { BlockMath } from "react-katex";
-import { ArrowRight, Info } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { Skeleton } from "@/components/ui/skeleton";
-import { MasteryBar } from "@/components/MasteryBar";
+import { AppShell } from "@/components/AppShell";
+import { MasteryEstimate } from "@/components/MasteryBar";
 import { PathProgress } from "@/components/PathProgress";
-import { ParticipantHeader } from "@/components/ParticipantHeader";
 import { useCreatePath, useCurrentPath, useMastery } from "@/lib/queries";
 import { useRequireCode } from "@/lib/useRequireCode";
-import { tierAverages, tierLabel } from "@/lib/utils";
+import { MASTERY_THRESHOLD, tierLabel, tierName } from "@/lib/utils";
 
-const BLOCK = process.env.NEXT_PUBLIC_DEFAULT_BLOCK ?? "A";
-
+// The Session screen: what you are working on now, how close the estimate is to
+// the threshold, and the way in to the lesson. The study condition is never
+// shown — only the topic that was chosen.
 export default function DashboardPage() {
   const { ready } = useRequireCode();
-  const path = useCurrentPath(BLOCK);
+  const path = useCurrentPath();
   const mastery = useMastery(ready);
   const createPath = useCreatePath();
 
@@ -50,136 +37,145 @@ export default function DashboardPage() {
     !ready || path.isLoading || (path.data === null && !createPath.isError);
 
   const current = path.data?.current_step ?? null;
-  const masteryByTopic = new Map(
-    (mastery.data?.entries ?? []).map((e) => [e.topic_id, e]),
-  );
+  const entries = mastery.data?.entries ?? [];
   const currentEntry = current
-    ? masteryByTopic.get(current.topic_id)
+    ? entries.find((e) => e.topic_id === current.topic_id)
     : undefined;
-  const tiers = tierAverages(mastery.data?.entries ?? []);
+  const passedSteps = path.data?.steps.filter((s) => s.status === "passed") ?? [];
+  const nextStep = path.data?.steps.find(
+    (s) => current && s.step_index === current.step_index + 1,
+  );
+  const nextName = nextStep
+    ? (entries.find((e) => e.topic_id === nextStep.topic_id)?.topic_name ??
+      nextStep.topic_id)
+    : "block complete";
 
   return (
-    <div className="bg-aurora min-h-screen">
-      <ParticipantHeader
-        block={path.data?.block ?? BLOCK}
-        passedCount={path.data?.passed_count}
-        totalTopics={path.data?.total_topics}
-      />
-
-      <main className="container grid gap-8 py-8 lg:grid-cols-[minmax(0,1fr)_320px]">
-        <div className="min-w-0 space-y-8">
-          {loading ? (
-            <Skeleton className="h-52 w-full" />
-          ) : path.data?.completed ? (
-            <Card>
-              <CardHeader>
-                <CardTitle>Block complete 🎉</CardTitle>
-                <CardDescription>
-                  You&apos;ve passed every topic in this block. Well done.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-          ) : current ? (
-            <Card className="relative overflow-hidden">
-              <div className="absolute inset-x-0 top-0 h-1 bg-brand-gradient" />
-              <CardHeader>
-                <CardDescription className="flex items-center gap-2">
-                  <span className="inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
+    <AppShell>
+      <div className="max-w-[880px] px-8 pb-24 pt-10 lg:px-14">
+        {loading ? (
+          <div className="space-y-6">
+            <Skeleton className="h-4 w-40" />
+            <Skeleton className="h-10 w-96" />
+            <Skeleton className="h-28 w-full" />
+            <Skeleton className="h-40 w-full" />
+          </div>
+        ) : path.data?.completed ? (
+          <div className="animate-paper-in">
+            <div className="kicker mb-2">Block {path.data.block} complete</div>
+            <h1 className="mb-3 font-display text-4xl">
+              Every topic in this block is cleared.
+            </h1>
+            <p className="max-w-[560px] text-base text-secondary-foreground">
+              All {path.data.total_topics} topics reached the{" "}
+              {MASTERY_THRESHOLD.toFixed(2)} threshold. Your next block begins
+              when the researcher opens it.
+            </p>
+            <div className="mt-7 flex gap-3">
+              <Button asChild>
+                <Link href="/profile">See your profile</Link>
+              </Button>
+              <Button asChild variant="secondary">
+                <Link href="/curriculum">Review the curriculum</Link>
+              </Button>
+            </div>
+          </div>
+        ) : current ? (
+          <div className="animate-paper-in">
+            <header className="mb-9 flex flex-wrap items-baseline justify-between gap-4">
+              <div>
+                <div className="kicker mb-2">
                   Current topic
-                </CardDescription>
-                <CardTitle className="text-2xl">
+                  {currentEntry ? ` · ${tierLabel(currentEntry.tier)}` : null}
+                </div>
+                <h1 className="font-display text-4xl">
                   {currentEntry?.topic_name ?? current.topic_id}
-                </CardTitle>
-                <p className="font-mono text-xs text-muted-foreground">
-                  {current.topic_id} · step {current.step_index + 1}
-                </p>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                {currentEntry ? (
-                  <MasteryBar
-                    label="Your mastery of this topic"
-                    value={currentEntry.p_mastered}
-                  />
-                ) : null}
-                <Button asChild size="lg" variant="brand">
-                  <Link href={`/learn/${current.id}`}>
-                    Open lesson
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-          ) : (
-            <Card>
-              <CardHeader>
-                <CardTitle>Setting up your path…</CardTitle>
-                <CardDescription>
-                  This only takes a moment.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-          )}
+                </h1>
+              </div>
+              <div className="flex flex-col gap-1 text-right">
+                <span className="kicker kicker-sm">Progress</span>
+                <span className="font-mono text-sm text-secondary-foreground">
+                  {path.data?.passed_count}/{path.data?.total_topics} passed ·
+                  step {current.step_index + 1}
+                </span>
+              </div>
+            </header>
 
-          {path.data ? (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Your path</CardTitle>
-                <CardDescription>
-                  {path.data.passed_count} of {path.data.total_topics} topics
-                  passed ({Math.round(path.data.completion_pct)}%)
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <PathProgress
-                  steps={path.data.steps}
-                  currentStepId={current?.id ?? null}
-                  totalTopics={path.data.total_topics}
-                />
-              </CardContent>
-            </Card>
-          ) : null}
-        </div>
+            {currentEntry ? (
+              <MasteryEstimate
+                value={currentEntry.p_mastered}
+                attempts={currentEntry.attempts}
+                className="mb-7"
+              />
+            ) : null}
 
-        <aside className="space-y-4">
-          <Card>
-            <CardHeader className="flex-row items-center justify-between space-y-0">
-              <CardTitle className="text-base">Mastery by tier</CardTitle>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant="ghost" size="icon" aria-label="How mastery is measured">
-                    <Info className="h-4 w-4" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="text-sm">
-                  <p className="mb-2 font-medium">How mastery is measured</p>
-                  <p className="mb-3 text-muted-foreground">
-                    Each answer updates a belief that you&apos;ve mastered a
-                    topic, using Bayesian knowledge tracing:
-                  </p>
-                  <BlockMath math={"P(L_t) = P(L_{t-1} \\mid \\text{obs}) + \\bigl(1 - P(L_{t-1} \\mid \\text{obs})\\bigr)\\, P(T)"} />
-                </PopoverContent>
-              </Popover>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {mastery.isLoading ? (
-                <Skeleton className="h-32 w-full" />
-              ) : tiers.length ? (
-                tiers.map((t) => (
-                  <MasteryBar
-                    key={t.tier}
-                    label={tierLabel(t.tier)}
-                    value={t.average}
-                  />
-                ))
-              ) : (
-                <p className="text-sm text-muted-foreground">
-                  Complete the diagnostic to see your mastery.
+            <div className="flex flex-wrap items-center gap-4">
+              <Button asChild>
+                <Link href={`/learn/${current.id}`}>
+                  {current.attempts > 0 ? "Resume lesson" : "Open lesson"}
+                </Link>
+              </Button>
+              <span className="text-[13.5px] text-muted-foreground">
+                Next: {nextName}
+              </span>
+            </div>
+
+            <section className="mt-12 border-t border-border pt-5">
+              <div className="kicker kicker-sm mb-3">Your path</div>
+              <PathProgress
+                steps={path.data?.steps ?? []}
+                currentStepId={current.id}
+                totalTopics={path.data?.total_topics ?? 0}
+                masteryByTopic={entries}
+              />
+            </section>
+
+            <section className="mt-11 flex flex-wrap gap-10 border-t border-border pt-5">
+              <div className="max-w-[340px]">
+                <div className="kicker kicker-sm mb-2">Why this topic</div>
+                <p className="text-[13.5px] leading-relaxed text-muted-foreground">
+                  Chosen from the topics whose prerequisites you have already
+                  cleared.
                 </p>
-              )}
-            </CardContent>
-          </Card>
-        </aside>
-      </main>
-    </div>
+              </div>
+              <div className="max-w-[340px]">
+                <div className="kicker kicker-sm mb-2">Cleared so far</div>
+                <p className="text-[13.5px] leading-relaxed text-muted-foreground">
+                  {passedSteps.length > 0
+                    ? passedSteps
+                        .slice(-3)
+                        .map(
+                          (s) =>
+                            entries.find((e) => e.topic_id === s.topic_id)
+                              ?.topic_name ?? s.topic_id,
+                        )
+                        .join(" · ")
+                    : "Nothing yet — this is your first topic."}
+                </p>
+              </div>
+              <div className="max-w-[340px]">
+                <div className="kicker kicker-sm mb-2">Tier</div>
+                <p className="text-[13.5px] leading-relaxed text-muted-foreground">
+                  {currentEntry
+                    ? `${tierLabel(currentEntry.tier)} · ${tierName(currentEntry.tier)}`
+                    : "—"}
+                </p>
+              </div>
+            </section>
+          </div>
+        ) : (
+          <div className="animate-paper-in">
+            <h1 className="mb-3 font-display text-[32px]">
+              Setting up your path…
+            </h1>
+            <p className="text-base text-secondary-foreground">
+              {createPath.isError
+                ? "Something went wrong building your path. Please refresh."
+                : "This only takes a moment."}
+            </p>
+          </div>
+        )}
+      </div>
+    </AppShell>
   );
 }

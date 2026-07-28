@@ -3,18 +3,18 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
 
+// Square mono tags. Used sparingly — the design labels with kickers, not chips.
 const badgeVariants = cva(
-  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium transition-colors",
+  "inline-flex items-center border px-2 py-0.5 font-mono text-2xs uppercase tracking-[0.12em]",
   {
     variants: {
       variant: {
-        default: "border-transparent bg-primary/10 text-primary",
-        brand:
-          "border-transparent bg-brand-gradient text-white shadow-soft",
-        secondary: "border-transparent bg-secondary text-secondary-foreground",
-        outline: "border-border text-foreground",
-        success: "border-transparent bg-success/15 text-success",
-        warning: "border-transparent bg-warning/15 text-warning",
+        default: "border-accent-border bg-accent text-accent-foreground",
+        secondary: "border-border bg-secondary text-muted-foreground",
+        outline: "border-border-strong text-muted-foreground",
+        success: "border-accent-border bg-accent text-accent-foreground",
+        warning: "border-border-strong bg-muted text-warning",
+        destructive: "border-destructive/40 bg-destructive-tint text-destructive",
         muted: "border-transparent bg-muted text-muted-foreground",
       },
     },

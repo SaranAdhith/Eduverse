@@ -23,7 +23,10 @@ test("authenticated routes have no critical a11y violations", async ({
   // Enroll to reach the participant-only routes.
   await page.goto("/enroll");
   await page.getByLabel(/i have read the above and consent/i).click();
-  await page.getByRole("button", { name: /generate my code/i }).click();
+  await page
+    .getByRole("button", { name: /consent and begin placement/i })
+    .click();
+  await page.getByRole("button", { name: /begin placement paper/i }).click();
   await expect(page).toHaveURL(/\/diagnostic/);
   await scan(page);
 
@@ -31,9 +34,17 @@ test("authenticated routes have no critical a11y violations", async ({
   for (let i = 0; i < 25; i++) {
     await page.getByRole("radio").first().check();
     await page.getByRole("button", { name: /submit answer/i }).click();
-    await page.getByRole("button", { name: /next question|see results/i }).click();
+    await page
+      .getByRole("button", { name: /continue|see starting estimates/i })
+      .click();
   }
-  await page.getByRole("button", { name: /begin learning/i }).click();
+  await page.getByRole("button", { name: /start learning/i }).click();
   await expect(page).toHaveURL(/\/dashboard/);
   await scan(page);
+
+  // The two standing views off the sidebar.
+  for (const path of ["/curriculum", "/profile"]) {
+    await page.goto(path);
+    await scan(page);
+  }
 });

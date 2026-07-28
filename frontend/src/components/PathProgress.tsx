@@ -1,48 +1,58 @@
 "use client";
 
 import Link from "next/link";
-import { Check } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import type { PathStep } from "@/lib/types";
+import type { MasteryEntry, PathStep } from "@/lib/types";
 
-// DOC_07 §4: horizontal stepper of past / current / lightly-previewed upcoming
-// topics. Passed steps link to a read-only review of their chunk.
+// A ruled strip of the block's steps: passed, current, and the count still to
+// come. Passed steps link to a read-only review of their chunk. Status is
+// carried by a text mark as well as the rule colour, never colour alone.
 interface PathProgressProps {
   steps: PathStep[];
   currentStepId: string | null;
   totalTopics: number;
+  masteryByTopic?: MasteryEntry[];
 }
 
 export function PathProgress({
   steps,
   currentStepId,
   totalTopics,
+  masteryByTopic = [],
 }: PathProgressProps) {
   const upcoming = Math.max(0, totalTopics - steps.length);
+  const nameOf = (topicId: string) =>
+    masteryByTopic.find((e) => e.topic_id === topicId)?.topic_name ?? topicId;
 
   return (
-    <div className="flex flex-wrap items-center gap-2">
+    <div className="border border-border bg-card">
       {steps.map((step) => {
         const isCurrent = step.id === currentStepId;
         const isPassed = step.status === "passed";
-        const chip = (
+        const body = (
           <div
             className={cn(
-              "flex min-w-[5.5rem] flex-col items-center gap-1 rounded-lg border px-3 py-2 text-center transition-colors",
-              isCurrent && "border-primary bg-accent/50",
-              isPassed && !isCurrent && "border-success/40 bg-success/5",
+              "grid grid-cols-[30px_1fr_auto] items-center gap-4 border-b border-border-soft border-l-2 px-4 py-3 text-sm transition-colors",
+              isCurrent
+                ? "border-l-primary bg-accent"
+                : "border-l-transparent",
+              isPassed && !isCurrent && "hover:bg-secondary",
             )}
           >
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-muted text-xs font-medium">
-              {isPassed ? (
-                <Check className="h-3.5 w-3.5 text-success" aria-hidden />
-              ) : (
-                step.step_index + 1
-              )}
+            <span className="font-mono text-xs text-faint">
+              {String(step.step_index + 1).padStart(2, "0")}
             </span>
-            <span className="font-mono text-xs text-muted-foreground">
-              {step.topic_id}
+            <span className={cn(isCurrent && "font-medium")}>
+              {nameOf(step.topic_id)}
+            </span>
+            <span
+              className={cn(
+                "font-mono text-[11px] uppercase tracking-[0.12em]",
+                isPassed ? "text-primary" : "text-faint",
+              )}
+            >
+              {isPassed ? "cleared" : isCurrent ? "current" : step.status}
             </span>
           </div>
         );
@@ -50,29 +60,22 @@ export function PathProgress({
           <Link
             key={step.id}
             href={`/learn/${step.id}`}
-            aria-label={`Review ${step.topic_id}`}
-            className="rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            aria-label={`Review ${nameOf(step.topic_id)}`}
+            className="block"
           >
-            {chip}
+            {body}
           </Link>
         ) : (
           <div key={step.id} aria-current={isCurrent ? "step" : undefined}>
-            {chip}
+            {body}
           </div>
         );
       })}
-      {Array.from({ length: upcoming }).map((_, i) => (
-        <div
-          key={`upcoming-${i}`}
-          aria-hidden
-          className="flex min-w-[5.5rem] flex-col items-center gap-1 rounded-lg border border-dashed px-3 py-2 text-center opacity-50"
-        >
-          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-muted text-xs font-medium">
-            {steps.length + i + 1}
-          </span>
-          <span className="font-mono text-xs text-muted-foreground">·····</span>
+      {upcoming > 0 ? (
+        <div className="px-4 py-3 font-mono text-[11px] uppercase tracking-[0.12em] text-faint">
+          + {upcoming} more to come
         </div>
-      ))}
+      ) : null}
     </div>
   );
 }

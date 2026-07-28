@@ -4,30 +4,31 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
 
+// Flat, square buttons. The primary is a solid deep-green fill; `ink` is the
+// darker "continue" action used after a question is revealed.
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium ring-offset-background transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98] [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-[15px] font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-1 disabled:pointer-events-none disabled:opacity-45 [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default:
-          "bg-primary text-primary-foreground shadow-soft hover:bg-primary/90 hover:shadow-glow",
-        brand:
-          "bg-brand-gradient text-white shadow-soft hover:shadow-glow hover:brightness-[1.06]",
+        default: "bg-primary text-primary-foreground hover:bg-primary-hover",
+        ink: "bg-foreground text-primary-foreground hover:bg-secondary-foreground",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/70",
+          "border border-border bg-card text-foreground hover:border-primary",
         outline:
-          "border border-border bg-card/60 backdrop-blur hover:bg-accent hover:text-accent-foreground hover:border-primary/40",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
+          "border border-input bg-transparent text-foreground hover:border-primary hover:bg-accent",
+        ghost: "text-muted-foreground hover:bg-secondary hover:text-foreground",
         destructive:
-          "bg-destructive text-destructive-foreground shadow-soft hover:bg-destructive/90",
-        link: "text-primary underline-offset-4 hover:underline",
+          "bg-destructive text-destructive-foreground hover:brightness-95",
+        link: "text-muted-foreground underline underline-offset-[3px] hover:text-foreground",
       },
       size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-12 rounded-lg px-8 text-base",
-        xl: "h-14 rounded-xl px-9 text-base",
+        default: "h-11 px-6 py-3",
+        sm: "h-9 px-4 text-sm",
+        lg: "h-12 px-7",
+        xl: "h-14 px-8 text-base",
         icon: "h-10 w-10",
+        none: "",
       },
     },
     defaultVariants: {

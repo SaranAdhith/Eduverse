@@ -31,14 +31,14 @@ function CodeBlock({ children }: { children: ReactNode }) {
         type="button"
         onClick={copy}
         aria-label={copied ? "Copied" : "Copy code"}
-        className="absolute right-2 top-2 inline-flex items-center gap-1 rounded-md border bg-background/80 px-2 py-1 text-xs text-muted-foreground opacity-0 transition-opacity hover:text-foreground focus-visible:opacity-100 group-hover:opacity-100"
+        className="absolute right-2 top-2 inline-flex items-center gap-1 border border-border bg-card px-2 py-1 font-mono text-[11px] uppercase tracking-[0.1em] text-muted-foreground opacity-0 transition-opacity hover:text-foreground focus-visible:opacity-100 group-hover:opacity-100"
       >
         {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
         {copied ? "Copied" : "Copy"}
       </button>
       <pre
         ref={ref}
-        className="overflow-x-auto rounded-md border bg-muted/60 p-4 font-mono text-sm leading-relaxed"
+        className="overflow-x-auto border border-border bg-card px-5 py-4 font-mono text-sm leading-[1.75]"
       >
         {children}
       </pre>
@@ -48,37 +48,37 @@ function CodeBlock({ children }: { children: ReactNode }) {
 
 export function LessonMarkdown({ markdown }: { markdown: string }) {
   return (
-    <div className="prose-lesson max-w-none text-[17px]">
+    <div className="prose-lesson max-w-none text-[16.5px]">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
           h2: ({ children }) => (
-            <h2 className="mb-3 mt-8 text-2xl font-semibold tracking-tight first:mt-0">
+            <h2 className="mb-3 mt-10 font-display text-[26px] leading-tight first:mt-0">
               {children}
             </h2>
           ),
           h3: ({ children }) => (
-            <h3 className="mb-2 mt-6 text-xl font-semibold tracking-tight">
+            <h3 className="mb-2 mt-7 font-display text-[21px] leading-tight">
               {children}
             </h3>
           ),
           p: ({ children }) => (
-            <p className="my-4 leading-[1.7] text-foreground/90">{children}</p>
+            <p className="my-4 text-pretty leading-[1.7] text-secondary-foreground">{children}</p>
           ),
           ul: ({ children }) => (
-            <ul className="my-4 list-disc space-y-2 pl-6 leading-[1.7]">
+            <ul className="my-4 list-disc space-y-2 pl-6 leading-[1.7] text-secondary-foreground">
               {children}
             </ul>
           ),
           ol: ({ children }) => (
-            <ol className="my-4 list-decimal space-y-2 pl-6 leading-[1.7]">
+            <ol className="my-4 list-decimal space-y-2 pl-6 leading-[1.7] text-secondary-foreground">
               {children}
             </ol>
           ),
           a: ({ children, href }) => (
             <a
               href={href}
-              className="text-primary underline underline-offset-4"
+              className="text-primary underline underline-offset-2"
               target="_blank"
               rel="noreferrer"
             >
@@ -86,7 +86,7 @@ export function LessonMarkdown({ markdown }: { markdown: string }) {
             </a>
           ),
           strong: ({ children }) => (
-            <strong className="font-semibold">{children}</strong>
+            <strong className="font-medium text-foreground">{children}</strong>
           ),
           pre: ({ children }) => <CodeBlock>{children}</CodeBlock>,
           code: ({ className, children }) => {
@@ -97,7 +97,7 @@ export function LessonMarkdown({ markdown }: { markdown: string }) {
             return (
               <code
                 className={cn(
-                  "rounded bg-muted px-1.5 py-0.5 font-mono text-[0.9em]",
+                  "border border-border-soft bg-secondary px-1.5 py-0.5 font-mono text-[0.88em]",
                 )}
               >
                 {children}

@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ArrowRight } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import type { VideoDeepLink } from "@/lib/types";
 
@@ -38,7 +36,7 @@ export function VideoSegment({
 
   return (
     <div className="space-y-4">
-      <div className="overflow-hidden rounded-lg border bg-black">
+      <div className="border border-border bg-foreground">
         <div className="relative aspect-video">
           <iframe
             className="absolute inset-0 h-full w-full"
@@ -50,15 +48,19 @@ export function VideoSegment({
         </div>
       </div>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="text-sm text-muted-foreground">
-          <span className="font-medium text-foreground">{video.title}</span>
+        <div className="text-[13px] text-muted-foreground">
+          <span className="text-foreground">{video.title}</span>
           {" · "}
           {video.channel_title}
         </div>
         {showContinue && onContinue ? (
-          <Button variant="outline" onClick={onContinue} className="animate-fade-in">
-            Continue to quiz
-            <ArrowRight className="h-4 w-4" />
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={onContinue}
+            className="animate-paper-in"
+          >
+            Continue to the check
           </Button>
         ) : null}
       </div>

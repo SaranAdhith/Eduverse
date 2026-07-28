@@ -2,17 +2,15 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, ChevronRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { AppShell } from "@/components/AppShell";
 import { LessonMarkdown } from "@/components/LessonMarkdown";
 import { VideoSegment } from "@/components/VideoSegment";
 import { useChunk, useCurrentPath, useLogChunkView } from "@/lib/queries";
 import { useRequireCode } from "@/lib/useRequireCode";
-
-const BLOCK = process.env.NEXT_PUBLIC_DEFAULT_BLOCK ?? "A";
+import { tierFromTopicId, tierLabel } from "@/lib/utils";
 
 export default function LearnPage({
   params,
@@ -22,7 +20,7 @@ export default function LearnPage({
   const { stepId } = params;
   const { ready } = useRequireCode();
   const chunk = useChunk(stepId);
-  const path = useCurrentPath(BLOCK);
+  const path = useCurrentPath();
   const logChunkView = useLogChunkView();
 
   const [videoDone, setVideoDone] = useState(false);
@@ -48,27 +46,35 @@ export default function LearnPage({
 
   if (!ready || chunk.isLoading) {
     return (
-      <main className="container max-w-3xl space-y-6 py-10">
-        <Skeleton className="h-4 w-52" />
-        <Skeleton className="h-64 w-full" />
-        <Skeleton className="h-40 w-full" />
-        <p className="text-center text-sm text-muted-foreground">
-          Preparing your lesson…
-        </p>
-      </main>
+      <AppShell>
+        <div className="max-w-[760px] space-y-6 px-8 py-10 lg:px-14">
+          <Skeleton className="h-4 w-52" />
+          <Skeleton className="h-10 w-96" />
+          <Skeleton className="h-64 w-full" />
+          <Skeleton className="h-40 w-full" />
+          <p className="text-sm text-muted-foreground">
+            Preparing your lesson…
+          </p>
+        </div>
+      </AppShell>
     );
   }
 
   if (chunk.isError || !chunk.data) {
     return (
-      <main className="container max-w-3xl space-y-4 py-10 text-center">
-        <p className="text-muted-foreground">
-          We couldn&apos;t load this lesson. Please try again shortly.
-        </p>
-        <Button asChild variant="outline">
-          <Link href="/dashboard">Back to dashboard</Link>
-        </Button>
-      </main>
+      <AppShell>
+        <div className="max-w-[760px] space-y-5 px-8 py-10 lg:px-14">
+          <h1 className="font-display text-[28px]">
+            We couldn&apos;t load this lesson.
+          </h1>
+          <p className="text-secondary-foreground">
+            It may still be being written. Please try again shortly.
+          </p>
+          <Button asChild variant="secondary">
+            <Link href="/dashboard">Back to session</Link>
+          </Button>
+        </div>
+      </AppShell>
     );
   }
 
@@ -76,84 +82,100 @@ export default function LearnPage({
   const video = data.video;
   const hasVideo = video !== null;
   const gateReady = isReview || !hasVideo || videoDone || finishedManually;
+  const tier = tierFromTopicId(data.topic.topic_id);
+  const prereqs = data.topic.prerequisite_ids;
 
   return (
-    <main className="container max-w-3xl space-y-8 py-10">
-      <nav
-        className="flex items-center gap-1 text-sm text-muted-foreground"
-        aria-label="Breadcrumb"
-      >
-        <Link href="/dashboard" className="hover:text-foreground">
-          Dashboard
-        </Link>
-        <ChevronRight className="h-4 w-4" />
-        <span className="text-foreground">{data.topic.name}</span>
-        {step ? (
-          <>
-            <ChevronRight className="h-4 w-4" />
-            <span>Step {step.step_index + 1}</span>
-          </>
-        ) : null}
-      </nav>
+    <AppShell>
+      <article className="max-w-[760px] px-8 pb-24 pt-10 lg:px-14">
+        <header className="mb-9">
+          <div className="kicker mb-2">
+            {isReview ? "Review · " : ""}
+            {tier !== null ? tierLabel(tier) : data.topic.topic_id}
+            {step ? ` · step ${step.step_index + 1}` : ""}
+          </div>
+          <h1 className="font-display text-4xl">{data.topic.name}</h1>
+          {data.topic.description ? (
+            <p className="mt-3 max-w-[620px] text-pretty text-base text-secondary-foreground">
+              {data.topic.description}
+            </p>
+          ) : null}
+        </header>
 
-      {isReview ? (
-        <Badge variant="success">Reviewing a completed topic</Badge>
-      ) : null}
-
-      <article>
         <LessonMarkdown markdown={data.lesson_markdown} />
-      </article>
 
-      {video ? (
-        <section className="space-y-3">
-          <h2 className="text-lg font-semibold">Watch</h2>
-          <VideoSegment
-            video={video}
-            onReachedEnd={() => {
-              setVideoDone(true);
-              logChunkView.mutate({
-                step_id: stepId,
-                phase: "video_end",
-                video_seconds_watched: video.end_seconds - video.start_seconds,
-              });
-            }}
-            onContinue={() => setVideoDone(true)}
-          />
+        {video ? (
+          <section className="mt-12 border-t border-border pt-7">
+            <div className="kicker kicker-sm mb-4">Watch</div>
+            <VideoSegment
+              video={video}
+              onReachedEnd={() => {
+                setVideoDone(true);
+                logChunkView.mutate({
+                  step_id: stepId,
+                  phase: "video_end",
+                  video_seconds_watched:
+                    video.end_seconds - video.start_seconds,
+                });
+              }}
+              onContinue={() => setVideoDone(true)}
+            />
+          </section>
+        ) : null}
+
+        <footer className="mt-12 flex flex-col items-start gap-4 border-t border-border pt-7">
+          {isReview ? (
+            <Button asChild variant="secondary">
+              <Link href="/dashboard">Back to session</Link>
+            </Button>
+          ) : (
+            <>
+              {gateReady ? (
+                <Button asChild>
+                  <Link href={`/learn/${stepId}/gate`}>
+                    I&apos;m ready — take the check
+                  </Link>
+                </Button>
+              ) : (
+                <Button disabled>I&apos;m ready — take the check</Button>
+              )}
+              {hasVideo && !gateReady ? (
+                <button
+                  type="button"
+                  onClick={() => setFinishedManually(true)}
+                  className="text-[13.5px] text-muted-foreground underline underline-offset-[3px] hover:text-foreground"
+                >
+                  I&apos;ve already finished the video
+                </button>
+              ) : null}
+              <p className="text-[13px] text-faint">
+                Five questions. Nothing is graded — the check only updates the
+                estimate.
+              </p>
+            </>
+          )}
+        </footer>
+
+        <section className="mt-11 flex flex-wrap gap-10 border-t border-border pt-5">
+          <div className="max-w-[340px]">
+            <div className="kicker kicker-sm mb-2">Prerequisites</div>
+            <p className="font-mono text-[13px] leading-relaxed text-muted-foreground">
+              {prereqs.length > 0
+                ? prereqs.join(" · ")
+                : "None — this is a foundation topic."}
+            </p>
+          </div>
+          {data.fallback ? (
+            <div className="max-w-[340px]">
+              <div className="kicker kicker-sm mb-2">Note</div>
+              <p className="text-[13.5px] leading-relaxed text-muted-foreground">
+                No curated video was available for this topic, so the lesson
+                stands on its own.
+              </p>
+            </div>
+          ) : null}
         </section>
-      ) : null}
-
-      <footer className="flex flex-col items-start gap-3 border-t pt-6">
-        {isReview ? (
-          <Button asChild size="lg" variant="outline">
-            <Link href="/dashboard">Back to dashboard</Link>
-          </Button>
-        ) : (
-          <>
-            {gateReady ? (
-              <Button asChild size="lg" variant="brand">
-                <Link href={`/learn/${stepId}/gate`}>
-                  Ready for the gate quiz
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-              </Button>
-            ) : (
-              <Button size="lg" disabled>
-                Ready for the gate quiz
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            )}
-            {hasVideo && !gateReady ? (
-              <button
-                type="button"
-                onClick={() => setFinishedManually(true)}
-                className="text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground"
-              >
-                I&apos;ve already finished the video
-              </button>
-            ) : null}
-          </>
-        )}
-      </footer>
-    </main>
+      </article>
+    </AppShell>
   );
 }

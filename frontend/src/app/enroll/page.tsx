@@ -5,17 +5,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import { Logo } from "@/components/Logo";
+import { SplitPage } from "@/components/SplitPage";
 import { useEnroll } from "@/lib/queries";
 import { useParticipant } from "@/lib/store";
 
@@ -24,89 +15,99 @@ export default function EnrollPage() {
   const enroll = useEnroll();
   const setCode = useParticipant((s) => s.setCode);
   const [consent, setConsent] = useState(false);
+  const [issued, setIssued] = useState<string | null>(null);
 
   const onSubmit = async () => {
     const result = await enroll.mutateAsync(true);
     setCode(result.code);
-    router.push("/diagnostic");
+    // The code is the only way back in, so it gets a screen of its own before
+    // the placement paper starts.
+    setIssued(result.code);
   };
 
   return (
-    <main className="bg-aurora flex min-h-screen flex-col items-center px-6 py-10">
-      <Link
-        href="/"
-        className="mb-8 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-      >
-        <Logo size={34} />
-      </Link>
-      <Card className="animate-fade-in-up w-full max-w-2xl">
-        <CardHeader>
-          <CardTitle className="text-2xl">Consent to take part</CardTitle>
-          <CardDescription>
-            Please read the study information before you begin.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
+    <SplitPage>
+      {issued ? (
+        <div className="animate-paper-in border border-border bg-card px-[34px] pb-[30px] pt-[34px]">
+          <div className="kicker">Enrolled</div>
+          <h2 className="mb-2 mt-3 font-display text-[25px]">
+            This is your participant code
+          </h2>
+          <p className="mb-[22px] text-sm text-muted-foreground">
+            Write it down. It is the only way to return to your session — there
+            is no account and no password to recover.
+          </p>
+          <div className="border border-input bg-secondary px-3.5 py-4 text-center font-mono text-[28px] tracking-[0.2em]">
+            {issued}
+          </div>
+          <Button
+            className="mt-6 w-full"
+            onClick={() => router.push("/diagnostic")}
+          >
+            Begin placement paper
+          </Button>
+          <p className="mt-3.5 text-center text-xs text-faint">
+            Takes about 15 minutes.
+          </p>
+        </div>
+      ) : (
+        <div className="border border-border bg-card px-[34px] pb-[30px] pt-[34px]">
+          <div className="kicker">Enrolment</div>
+          <h2 className="mb-2 mt-3 font-display text-[25px]">
+            Consent to take part
+          </h2>
+          <p className="mb-[22px] text-sm text-muted-foreground">
+            No account, no email address. A code is issued to you and it is the
+            only identifier stored with your responses.
+          </p>
+
           {/* The consent *structure* is settled; the exact IRB-approved wording
               is substituted at deployment — ethics paperwork is institutional
-              and out of scope for this codebase (DOC_08 §11). The data-use text
-              below reflects the DOC_08 instrumentation that is now live. */}
-          <div className="space-y-3 rounded-md border bg-muted/30 p-4 text-sm leading-relaxed text-muted-foreground">
+              and out of scope for this codebase (DOC_08 §11). */}
+          <div className="note-panel mb-6 flex flex-col gap-2.5 p-4 text-[13px] leading-relaxed text-secondary-foreground">
             <p>
-              <strong className="text-foreground">What this is.</strong> You are
-              invited to take part in a study of an adaptive learning agent for
-              Python. You will complete a short placement quiz, then work through
-              two blocks of learning topics. The order of the blocks and the way
-              each is taught are set by the study and are not shown to you.
+              You will complete a short placement paper, then work through two
+              blocks of topics. The order of the blocks and the way each is
+              taught are set by the study and are not shown to you.
             </p>
             <p>
-              <strong className="text-foreground">Voluntariness.</strong> Taking
-              part is entirely voluntary. You may stop at any time without giving
-              a reason and without any consequence.
+              Your answers, response times and topic sequence are recorded for
+              research purposes.
             </p>
             <p>
-              <strong className="text-foreground">Data use.</strong> Your quiz
-              answers, learning progress, and interactions with the lessons
-              (including timing) are recorded as timestamped events under an
-              anonymous code and used only for research. No personal identifying
-              information is collected.
-            </p>
-            <p>
-              <strong className="text-foreground">Contact.</strong> For questions
-              about the study, contact the research team (details to be provided).
+              Taking part is voluntary. You may stop at any point, and withdrawn
+              data is deleted within 30 days.
             </p>
           </div>
 
-          <div className="flex items-start gap-3">
+          <label className="mb-6 flex cursor-pointer items-start gap-3 text-[13px] leading-relaxed">
             <Checkbox
               id="consent"
+              className="mt-0.5"
               checked={consent}
               onCheckedChange={(v) => setConsent(v === true)}
             />
-            <Label htmlFor="consent" className="leading-relaxed">
-              I have read the above and consent to take part.
-            </Label>
-          </div>
+            <span>I have read the above and consent to take part.</span>
+          </label>
 
           {enroll.isError ? (
-            <p className="text-sm text-destructive" role="alert">
+            <p className="mb-4 text-[13px] text-destructive" role="alert">
               Something went wrong creating your code. Please try again.
             </p>
           ) : null}
-        </CardContent>
-        <CardFooter className="flex items-center justify-between">
-          <Button asChild variant="ghost">
-            <Link href="/">Back</Link>
-          </Button>
+
           <Button
-            variant="brand"
+            className="w-full"
             onClick={onSubmit}
             disabled={!consent || enroll.isPending}
           >
-            {enroll.isPending ? "Generating…" : "Generate my code"}
+            {enroll.isPending ? "Enrolling…" : "Consent and begin placement"}
           </Button>
-        </CardFooter>
-      </Card>
-    </main>
+          <p className="mt-3.5 text-center text-xs text-faint">
+            Already have a code? <Link href="/resume">Resume your session</Link>
+          </p>
+        </div>
+      )}
+    </SplitPage>
   );
 }

@@ -10,6 +10,7 @@ import {
 } from "@tanstack/react-query";
 
 import { ApiError, apiFetch } from "./api";
+import { useParticipant } from "./store";
 import {
   advanceResponseSchema,
   answerResponseSchema,
@@ -101,6 +102,10 @@ export function useMastery(enabled = true) {
 // --- path ------------------------------------------------------------------ //
 /** Current path for the block, or null if none exists yet (404). */
 export function useCurrentPath(block: string = DEFAULT_BLOCK) {
+  // Hold the request until the code has hydrated out of localStorage —
+  // firing early sends an unauthenticated GET, and apiFetch treats the
+  // resulting 401 as a lost session and bounces to /resume.
+  const code = useParticipant((s) => s.code);
   return useQuery<PathCurrentResponse | null>({
     queryKey: queryKeys.currentPath(block),
     queryFn: async () => {
@@ -115,6 +120,7 @@ export function useCurrentPath(block: string = DEFAULT_BLOCK) {
       }
     },
     staleTime: 5_000,
+    enabled: Boolean(code),
   });
 }
 
